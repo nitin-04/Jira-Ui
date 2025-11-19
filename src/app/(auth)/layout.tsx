@@ -18,8 +18,8 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
           <Image
             src="/logo.svg"
             alt="Logo"
-            width={100}
-            height={56}
+            width={50}
+            height={10}
             className="mb-8"
           />
           <Button asChild variant="secondary">
