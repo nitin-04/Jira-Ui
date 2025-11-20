@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import Image from 'next/image';
+
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface WorkspaceAvatarProps {
   image?: string;
@@ -13,7 +14,8 @@ export const WorkspaceAvatar = ({
   name,
   className,
 }: WorkspaceAvatarProps) => {
-  if (image) {
+  console.log('Image value:', image, 'Type:', typeof image);
+  if (image && image !== 'undefined' && image !== 'null') {
     return (
       <div
         className={cn('size-10 relative rounded-md overflow-hidden', className)}
@@ -26,7 +28,7 @@ export const WorkspaceAvatar = ({
   return (
     <Avatar className={cn('size-10 rounded-md', className)}>
       <AvatarFallback className="text-white bg-blue-600 font-semibold text-lg uppercase rounded-md ">
-        {name[0]}
+        {name.charAt(0).toUpperCase()}
       </AvatarFallback>
     </Avatar>
   );
