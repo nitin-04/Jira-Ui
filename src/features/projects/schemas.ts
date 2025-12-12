@@ -10,5 +10,3 @@ export const createProjectSchema = z.object({
     .optional(),
   workspaceId: z.string(),
 });
-
-export default createProjectSchema;

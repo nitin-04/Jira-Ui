@@ -6,7 +6,7 @@ import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { ID, Query } from 'node-appwrite';
 import z from 'zod';
-import createProjectSchema from '../schemas';
+import { createProjectSchema } from '../schemas';
 
 const app = new Hono()
   .post(
@@ -60,7 +60,6 @@ const app = new Hono()
         ID.unique(),
         {
           name,
-          userId: user.$id,
           imageUrl: uploadedImageUrl,
           workspaceId,
         }
