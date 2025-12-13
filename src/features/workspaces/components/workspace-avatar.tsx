@@ -14,7 +14,7 @@ export const WorkspaceAvatar = ({
   name,
   className,
 }: WorkspaceAvatarProps) => {
-  console.log('Image value:', image, 'Type:', typeof image);
+  // console.log('Image value:', image, 'Type:', typeof image);
   if (image && image !== 'undefined' && image !== 'null') {
     return (
       <div

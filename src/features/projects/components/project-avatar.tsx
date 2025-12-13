@@ -16,7 +16,7 @@ export const ProjectAvatar = ({
   className,
   fallbackClassName,
 }: ProjectAvatarProps) => {
-  console.log('Image value:', image, 'Type:', typeof image);
+  // console.log('Image value:', image, 'Type:', typeof image);
   if (image && image !== 'undefined' && image !== 'null') {
     return (
       <div
