@@ -14,9 +14,10 @@ import {
 
 import { useDeleteTask } from '../api/use-delete-task';
 import { useConfirm } from '@/hooks/use-confirm';
-import { useRouter } from 'next/router';
+
 import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
 import { useEditTaskModal } from '../hooks/use-edit-task-modal.';
+import { useRouter } from 'next/navigation';
 
 interface TaskActionsProps {
   id: string;
