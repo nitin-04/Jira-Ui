@@ -20,7 +20,7 @@ const app = new Hono()
     const task = await databases.getDocument<Task>(
       DATABASE_ID,
       TASKS_ID,
-      taskId
+      taskId,
     );
 
     const member = await getMember({
@@ -50,7 +50,7 @@ const app = new Hono()
         status: z.nativeEnum(TaskStatus).nullish(),
         search: z.string().nullish(),
         dueDate: z.string().nullish(),
-      })
+      }),
     ),
     async (c) => {
       const { users } = await createAdminClient();
@@ -98,7 +98,7 @@ const app = new Hono()
       const tasks = await databases.listDocuments<Task>(
         DATABASE_ID,
         TASKS_ID,
-        query
+        query,
       );
 
       const projectIds = tasks.documents.map((task) => task.projectId);
@@ -107,13 +107,13 @@ const app = new Hono()
       const projects = await databases.listDocuments<Project>(
         DATABASE_ID,
         PROJECTS_ID,
-        projectIds.length > 0 ? [Query.contains('$id', projectIds)] : []
+        projectIds.length > 0 ? [Query.contains('$id', projectIds)] : [],
       );
 
       const members = await databases.listDocuments(
         DATABASE_ID,
         MEMBERS_ID,
-        assigneeIds.length > 0 ? [Query.contains('$id', assigneeIds)] : []
+        assigneeIds.length > 0 ? [Query.contains('$id', assigneeIds)] : [],
       );
 
       const assignees = await Promise.all(
@@ -124,16 +124,16 @@ const app = new Hono()
             name: user.name,
             email: user.email,
           };
-        })
+        }),
       );
 
       const populatedTasks = tasks.documents.map((task) => {
         const project = projects.documents.find(
-          (project) => project.$id === task.projectId
+          (project) => project.$id === task.projectId,
         );
 
         const assignee = assignees.find(
-          (assignee) => assignee.$id === task.assigneeId
+          (assignee) => assignee.$id === task.assigneeId,
         );
 
         return {
@@ -149,7 +149,7 @@ const app = new Hono()
           documents: populatedTasks,
         },
       });
-    }
+    },
   )
 
   .post(
@@ -180,7 +180,7 @@ const app = new Hono()
           Query.equal('workspaceId', workspaceId),
           Query.orderAsc('position'),
           Query.limit(1),
-        ]
+        ],
       );
 
       const newPosition =
@@ -200,10 +200,10 @@ const app = new Hono()
           dueDate,
           assigneeId,
           position: newPosition,
-        }
+        },
       );
       return c.json({ data: task });
-    }
+    },
   )
 
   .patch(
@@ -221,7 +221,7 @@ const app = new Hono()
       const existingTask = await databases.getDocument<Task>(
         DATABASE_ID,
         TASKS_ID,
-        taskId
+        taskId,
       );
 
       const member = await getMember({
@@ -245,11 +245,12 @@ const app = new Hono()
           dueDate: dueDate ? dueDate.toISOString() : undefined,
           assigneeId,
           description,
-        }
+        },
       );
       return c.json({ data: task });
-    }
+    },
   )
+
   .get('/:taskId', sessionMiddleware, async (c) => {
     const currentUser = c.get('user');
     const databases = c.get('databases');
@@ -259,7 +260,7 @@ const app = new Hono()
     const task = await databases.getDocument<Task>(
       DATABASE_ID,
       TASKS_ID,
-      taskId
+      taskId,
     );
 
     const currentMember = await getMember({
@@ -275,13 +276,13 @@ const app = new Hono()
     const project = await databases.getDocument<Project>(
       DATABASE_ID,
       PROJECTS_ID,
-      task.projectId
+      task.projectId,
     );
 
     const member = await databases.getDocument(
       DATABASE_ID,
       MEMBERS_ID,
-      task.assigneeId
+      task.assigneeId,
     );
 
     const user = await users.get(member.userId);
@@ -299,6 +300,73 @@ const app = new Hono()
         assignee,
       },
     });
-  });
+  })
+
+  .post(
+    '/bulk-update',
+    sessionMiddleware,
+    zValidator(
+      'json',
+      z.object({
+        tasks: z.array(
+          z.object({
+            $id: z.string(),
+            status: z.nativeEnum(TaskStatus),
+            position: z.number().int().positive().min(1000).max(1_000_000),
+          }),
+        ),
+      }),
+    ),
+
+    async (c) => {
+      const databases = c.get('databases');
+      const user = c.get('user');
+      const { tasks } = await c.req.valid('json');
+
+      const tasksToUpdate = await databases.listDocuments<Task>(
+        DATABASE_ID,
+        TASKS_ID,
+        [
+          Query.contains(
+            '$id',
+            tasks.map((task) => task.$id),
+          ),
+        ],
+      );
+
+      const workspaceIds = new Set(
+        tasksToUpdate.documents.map((task) => task.workspaceId),
+      );
+      if (workspaceIds.size !== 1) {
+        return c.json({
+          error: ' All tasks must belong to the same workspace',
+        });
+      }
+
+      const workspaceId = tasksToUpdate.documents[0].workspaceId;
+
+      const member = await getMember({
+        databases,
+        workspaceId,
+        userId: user.$id,
+      });
+
+      if (!member) {
+        return c.json({ error: 'unauthorized' }, 401);
+      }
+
+      const updatedTasks = await Promise.all(
+        tasks.map(async (task) => {
+          const { $id, status, position } = task;
+          return databases.updateDocument<Task>(DATABASE_ID, TASKS_ID, $id, {
+            status,
+            position,
+          });
+        }),
+      );
+
+      return c.json({ data: updatedTasks });
+    },
+  );
 
 export default app;
