@@ -9,6 +9,7 @@ import { useCreateTaskModal } from '../hooks/use-create-task-modal';
 import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
 import { useGetTasks } from '../api/use-get-tasks';
 import { useQueryState } from 'nuqs';
+import { DataCalender } from './data-calender';
 import { DataFilters } from './data.filters';
 import { useTaskFilters } from '../hooks/use-task-filters';
 import { DataTable } from './data-table';
@@ -87,8 +88,8 @@ export const TaskViewSwitcher = () => {
                 data={tasks?.documents ?? []}
               />
             </TabsContent>
-            <TabsContent value="calendar" className="mt-0">
-              Data Calendar
+            <TabsContent value="calendar" className="mt-0 h-full pb-4">
+              <DataCalender data={tasks?.documents ?? []} />
             </TabsContent>
           </>
         )}
