@@ -10,15 +10,22 @@ import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
 import { useGetTasks } from '../api/use-get-tasks';
 import { useQueryState } from 'nuqs';
 import { DataCalender } from './data-calender';
-import { DataFilters } from './data.filters';
+
 import { useTaskFilters } from '../hooks/use-task-filters';
 import { DataTable } from './data-table';
 import { columns } from './columns';
 import { DataKanban } from './data-kanban';
 import { TaskStatus } from '../types';
 import { useBulkUpdateTasks } from '../api/use-bulk-update-tasks';
+import { DataFilters } from './data-filters';
 
-export const TaskViewSwitcher = () => {
+interface TaskViewSwitcherProps {
+  hideProjectFilter?: boolean;
+}
+
+export const TaskViewSwitcher = ({
+  hideProjectFilter,
+}: TaskViewSwitcherProps) => {
   const [{ status, assigneeId, projectId, dueDate }] = useTaskFilters();
 
   const [view, setView] = useQueryState('task-view', {
@@ -71,7 +78,7 @@ export const TaskViewSwitcher = () => {
           </Button>
         </div>
         <DottedSeparator className="my-4" />
-        <DataFilters />
+        <DataFilters hideProjectFilter={hideProjectFilter} />
         <DottedSeparator className="my-4" />
         {isLoadingTasks ? (
           <div className="w-full border rounded-lg h-[200px] flex flex-col items-center justify-center">
