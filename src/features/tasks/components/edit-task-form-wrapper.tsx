@@ -5,7 +5,7 @@ import { useGetMembers } from '@/features/members/api/use-get-members';
 import { useGetProjects } from '@/features/projects/api/use-get-projects';
 import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
 import { Loader } from 'lucide-react';
-import { useGetTasks } from '../api/use-get-task';
+import { useGetTask } from '../api/use-get-task';
 import { EditTaskForm } from './edit-task-form';
 
 interface EditTaskFormWrapperProps {
@@ -19,7 +19,7 @@ export const EditTaskFormWrapper = ({
 }: EditTaskFormWrapperProps) => {
   const workspaceId = useWorkspaceId();
 
-  const { data: initialValues, isLoading: isLoadingTask } = useGetTasks({
+  const { data: initialValues, isLoading: isLoadingTask } = useGetTask({
     taskId: id,
   });
 
