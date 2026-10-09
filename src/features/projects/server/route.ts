@@ -1,4 +1,4 @@
-import { DATABASE_ID, IMAGES_BUCKET_ID, PROJECTS_ID } from '@/config';
+import { DATABASE_ID, IMAGES_BUCKET_ID, PROJECTS_ID, TASKS_ID } from '@/config';
 import { getMember } from '@/features/members/utlis';
 import { sessionMiddleware } from '@/lib/session-middleware';
 import { zValidator } from '@hono/zod-validator';
@@ -32,7 +32,7 @@ const app = new Hono()
           {
             error: 'Unauthorized',
           },
-          401
+          401,
         );
       }
 
@@ -42,16 +42,16 @@ const app = new Hono()
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),
-          image
+          image,
         );
 
         const arrayBuffer = await storage.getFileDownload(
           IMAGES_BUCKET_ID,
-          file.$id
+          file.$id,
         );
 
         uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-          arrayBuffer
+          arrayBuffer,
         ).toString('base64')}`;
       }
 
@@ -63,11 +63,11 @@ const app = new Hono()
           name,
           imageUrl: uploadedImageUrl,
           workspaceId,
-        }
+        },
       );
 
       return c.json({ data: project });
-    }
+    },
   )
 
   .get(
@@ -101,8 +101,32 @@ const app = new Hono()
       return c.json({
         data: projects,
       });
-    }
+    },
   )
+
+  .get('/:projectId', sessionMiddleware, async (c) => {
+    const user = c.get('user');
+    const databases = c.get('databases');
+    const { projectId } = c.req.param();
+
+    const project = await databases.getDocument<Project>(
+      DATABASE_ID,
+      PROJECTS_ID,
+      projectId,
+    );
+
+    const member = await getMember({
+      databases,
+      workspaceId: project.workspaceId,
+      userId: user.$id,
+    });
+
+    if (!member) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    return c.json({ data: project });
+  })
 
   .patch(
     '/:projectId',
@@ -119,7 +143,7 @@ const app = new Hono()
       const existingProject = await databases.getDocument<Project>(
         DATABASE_ID,
         PROJECTS_ID,
-        projectId
+        projectId,
       );
 
       const member = await getMember({
@@ -133,7 +157,7 @@ const app = new Hono()
           {
             error: 'Unauthorized',
           },
-          401
+          401,
         );
       }
 
@@ -143,16 +167,16 @@ const app = new Hono()
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),
-          image
+          image,
         );
 
         const arrayBuffer = await storage.getFileView(
           IMAGES_BUCKET_ID,
-          file.$id
+          file.$id,
         );
 
         uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-          arrayBuffer
+          arrayBuffer,
         ).toString('base64')}`;
       } else {
         uploadedImageUrl = image;
@@ -165,10 +189,10 @@ const app = new Hono()
         {
           name,
           imageUrl: uploadedImageUrl,
-        }
+        },
       );
       return c.json({ data: project });
-    }
+    },
   )
 
   .delete('/:projectId', sessionMiddleware, async (c) => {
@@ -180,7 +204,7 @@ const app = new Hono()
     const existingProject = await databases.getDocument<Project>(
       DATABASE_ID,
       PROJECTS_ID,
-      projectId
+      projectId,
     );
 
     const member = await getMember({
