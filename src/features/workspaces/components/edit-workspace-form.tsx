@@ -57,22 +57,29 @@ export const EditWorkspaceForm = ({
   const [DeleteDialog, confirmDelete] = useConfirm(
     'Delete Workspace',
     'Are you sure you want to delete this workspace?',
-    'destructive'
+    'destructive',
   );
 
   const [ResetDialog, confirmReset] = useConfirm(
     'Reset invite link',
     'This will reset the invite link. Are you sure you want to continue?',
-    'destructive'
+    'destructive',
   );
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const sanitizedImageUrl =
+    initialValues.imageUrl &&
+    initialValues.imageUrl !== 'undefined' &&
+    initialValues.imageUrl !== 'null'
+      ? initialValues.imageUrl
+      : '';
 
   const form = useForm<z.infer<typeof updateWorkspaceSchema>>({
     resolver: zodResolver(updateWorkspaceSchema),
     defaultValues: {
       ...initialValues,
-      image: initialValues.imageUrl ?? '',
+      image: sanitizedImageUrl,
     },
   });
 
@@ -89,7 +96,7 @@ export const EditWorkspaceForm = ({
         onSuccess: () => {
           window.location.href = '/';
         },
-      }
+      },
     );
   };
 
@@ -106,23 +113,14 @@ export const EditWorkspaceForm = ({
   const onSubmit = (values: z.infer<typeof updateWorkspaceSchema>) => {
     const finalValues = {
       ...values,
-      image: values.image instanceof File ? values.image : undefined,
+      image: values.image instanceof File ? values.image : '',
     };
-    mutate(
-      {
-        form: finalValues,
-        param: {
-          workspaceId: initialValues.$id,
-        },
+    mutate({
+      form: finalValues,
+      param: {
+        workspaceId: initialValues.$id,
       },
-      {
-        onSuccess: () => {
-          form.reset();
-          // onCancel?.();
-          // router.push(`/workspaces/${data.$id}`);
-        },
-      }
-    );
+    });
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -189,7 +187,9 @@ export const EditWorkspaceForm = ({
                   render={({ field }) => (
                     <div>
                       <div className="flex items-center gap-x-5">
-                        {field.value ? (
+                        {field.value &&
+                        field.value !== 'undefined' &&
+                        field.value !== 'null' ? (
                           <div className="size-[72px] relative rounded-md overflow-hidden">
                             <Image
                               alt="logo"
@@ -226,7 +226,9 @@ export const EditWorkspaceForm = ({
                             onChange={handleImageChange}
                             disabled={isPending}
                           />
-                          {field.value ? (
+                          {field.value &&
+                          field.value !== 'undefined' &&
+                          field.value !== 'null' ? (
                             <Button
                               type="button"
                               disabled={isPending}
@@ -234,7 +236,7 @@ export const EditWorkspaceForm = ({
                               size="xs"
                               className="w-fit mt-2 cursor-pointer"
                               onClick={() => {
-                                field.onChange(null);
+                                field.onChange('');
                                 if (inputRef.current) {
                                   inputRef.current.value = '';
                                 }

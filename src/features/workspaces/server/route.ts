@@ -40,12 +40,54 @@ const app = new Hono()
     const workspaces = await databases.listDocuments(
       DATABASE_ID,
       WORKSPACES_ID,
-      [Query.contains('$id', workspaceIds), Query.orderDesc('$createdAt')]
+      [Query.contains('$id', workspaceIds), Query.orderDesc('$createdAt')],
     );
 
     return c.json({ data: workspaces });
   })
 
+  .get('/:workspaceId', sessionMiddleware, async (c) => {
+    const user = c.get('user');
+    const databases = c.get('databases');
+    const { workspaceId } = c.req.param();
+
+    const member = await getMember({
+      databases,
+      workspaceId,
+      userId: user.$id,
+    });
+
+    if (!member) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const workspace = await databases.getDocument<Workspace>(
+      DATABASE_ID,
+      WORKSPACES_ID,
+      workspaceId,
+    );
+
+    return c.json({ data: workspace });
+  })
+
+  .get('/:workspaceId/info', sessionMiddleware, async (c) => {
+    const databases = c.get('databases');
+    const { workspaceId } = c.req.param();
+
+    const workspace = await databases.getDocument<Workspace>(
+      DATABASE_ID,
+      WORKSPACES_ID,
+      workspaceId,
+    );
+
+    return c.json({
+      data: {
+        $id: workspace.$id,
+        name: workspace.name,
+        imageUrl: workspace.imageUrl,
+      },
+    });
+  })
   .post(
     '/',
     zValidator('form', createWorkspaceSchema),
@@ -63,16 +105,16 @@ const app = new Hono()
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),
-          image
+          image,
         );
 
         const arrayBuffer = await storage.getFileDownload(
           IMAGES_BUCKET_ID,
-          file.$id
+          file.$id,
         );
 
         uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-          arrayBuffer
+          arrayBuffer,
         ).toString('base64')}`;
       }
 
@@ -85,7 +127,7 @@ const app = new Hono()
           userId: user.$id,
           imageUrl: uploadedImageUrl,
           inviteCode: generateInviteCode(6),
-        }
+        },
       );
 
       await databases.createDocument(DATABASE_ID, MEMBERS_ID, ID.unique(), {
@@ -94,7 +136,7 @@ const app = new Hono()
         role: MemberRole.ADMIN,
       });
       return c.json({ data: workspace });
-    }
+    },
   )
 
   .patch(
@@ -120,7 +162,7 @@ const app = new Hono()
           {
             error: 'Unauthorized',
           },
-          401
+          401,
         );
       }
 
@@ -130,19 +172,25 @@ const app = new Hono()
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),
-          image
+          image,
         );
 
         const arrayBuffer = await storage.getFileView(
           IMAGES_BUCKET_ID,
-          file.$id
+          file.$id,
         );
 
         uploadedImageUrl = `data:image/png;base64,${Buffer.from(
-          arrayBuffer
+          arrayBuffer,
         ).toString('base64')}`;
       } else {
-        uploadedImageUrl = image;
+        uploadedImageUrl =
+          typeof image === 'string' &&
+          image !== 'undefined' &&
+          image !== 'null' &&
+          image !== ''
+            ? image
+            : undefined;
       }
 
       const workspace = await databases.updateDocument(
@@ -152,10 +200,10 @@ const app = new Hono()
         {
           name,
           imageUrl: uploadedImageUrl,
-        }
+        },
       );
       return c.json({ data: workspace });
-    }
+    },
   )
 
   .delete('/:workspaceId', sessionMiddleware, async (c) => {
@@ -203,7 +251,7 @@ const app = new Hono()
       workspaceId,
       {
         inviteCode: generateInviteCode(6),
-      }
+      },
     );
 
     return c.json({
@@ -235,7 +283,7 @@ const app = new Hono()
       const workspace = await databases.getDocument<Workspace>(
         DATABASE_ID,
         WORKSPACES_ID,
-        workspaceId
+        workspaceId,
       );
 
       if (workspace.inviteCode !== code) {
@@ -248,7 +296,7 @@ const app = new Hono()
         role: MemberRole.MEMBER,
       });
       return c.json({ data: workspace });
-    }
+    },
   );
 
 export default app;

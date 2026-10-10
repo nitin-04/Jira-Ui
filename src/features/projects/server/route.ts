@@ -179,7 +179,13 @@ const app = new Hono()
           arrayBuffer,
         ).toString('base64')}`;
       } else {
-        uploadedImageUrl = image;
+        uploadedImageUrl =
+          typeof image === 'string' &&
+          image !== 'undefined' &&
+          image !== 'null' &&
+          image !== ''
+            ? image
+            : undefined;
       }
 
       const project = await databases.updateDocument(

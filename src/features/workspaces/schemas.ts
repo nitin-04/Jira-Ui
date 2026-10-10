@@ -5,7 +5,13 @@ export const createWorkspaceSchema = z.object({
   image: z
     .union([
       z.instanceof(File),
-      z.string().transform((value) => (value === '' ? undefined : value)),
+      z
+        .string()
+        .transform((value) =>
+          !value || value === 'undefined' || value === 'null'
+            ? undefined
+            : value,
+        ),
     ])
     .optional(),
 });
@@ -15,7 +21,13 @@ export const updateWorkspaceSchema = z.object({
   image: z
     .union([
       z.instanceof(File),
-      z.string().transform((value) => (value === '' ? undefined : value)),
+      z
+        .string()
+        .transform((value) =>
+          !value || value === 'undefined' || value === 'null'
+            ? undefined
+            : value,
+        ),
     ])
     .optional(),
 });

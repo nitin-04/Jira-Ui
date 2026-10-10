@@ -52,16 +52,23 @@ export const EditProjectForm = ({
   const [DeleteDialog, confirmDelete] = useConfirm(
     'Delete project',
     'Are you sure you want to delete this workspace?',
-    'destructive'
+    'destructive',
   );
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const sanitizedImageUrl =
+    initialValues.imageUrl &&
+    initialValues.imageUrl !== 'undefined' &&
+    initialValues.imageUrl !== 'null'
+      ? initialValues.imageUrl
+      : '';
 
   const form = useForm<z.infer<typeof updateProjectSchema>>({
     resolver: zodResolver(updateProjectSchema),
     defaultValues: {
       ...initialValues,
-      image: initialValues.imageUrl ?? '',
+      image: sanitizedImageUrl,
     },
   });
 
@@ -78,30 +85,21 @@ export const EditProjectForm = ({
         onSuccess: () => {
           window.location.href = `/workspaces/${initialValues.workspaceId}`;
         },
-      }
+      },
     );
   };
 
   const onSubmit = (values: z.infer<typeof updateProjectSchema>) => {
     const finalValues = {
       ...values,
-      image: values.image instanceof File ? values.image : undefined,
+      image: values.image instanceof File ? values.image : '',
     };
-    mutate(
-      {
-        form: finalValues,
-        param: {
-          projectId: initialValues.$id,
-        },
+    mutate({
+      form: finalValues,
+      param: {
+        projectId: initialValues.$id,
       },
-      {
-        onSuccess: () => {
-          form.reset();
-          // onCancel?.();
-          // router.push(`/workspaces/${data.$id}`);
-        },
-      }
-    );
+    });
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,7 +123,7 @@ export const EditProjectForm = ({
                 ? onCancel
                 : () =>
                     router.push(
-                      `/workspaces/${initialValues.workspaceId}/projects/${initialValues.$id}`
+                      `/workspaces/${initialValues.workspaceId}/projects/${initialValues.$id}`,
                     )
             }
           >
@@ -163,7 +161,9 @@ export const EditProjectForm = ({
                   render={({ field }) => (
                     <div>
                       <div className="flex items-center gap-x-5">
-                        {field.value ? (
+                        {field.value &&
+                        field.value !== 'undefined' &&
+                        field.value !== 'null' ? (
                           <div className="size-[72px] relative rounded-md overflow-hidden">
                             <Image
                               alt="logo"
@@ -200,7 +200,9 @@ export const EditProjectForm = ({
                             onChange={handleImageChange}
                             disabled={isPending}
                           />
-                          {field.value ? (
+                          {field.value &&
+                          field.value !== 'undefined' &&
+                          field.value !== 'null' ? (
                             <Button
                               type="button"
                               disabled={isPending}
@@ -208,7 +210,7 @@ export const EditProjectForm = ({
                               size="xs"
                               className="w-fit mt-2 cursor-pointer"
                               onClick={() => {
-                                field.onChange(null);
+                                field.onChange('');
                                 if (inputRef.current) {
                                   inputRef.current.value = '';
                                 }
