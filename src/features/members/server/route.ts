@@ -8,7 +8,7 @@ import { getMember } from '../utlis';
 import { DATABASE_ID, MEMBERS_ID } from '@/config';
 import { Query } from 'node-appwrite';
 import { error } from 'console';
-import { MemberRole } from '../types';
+import { Member, MemberRole } from '../types';
 
 const app = new Hono()
   .get(
@@ -33,9 +33,11 @@ const app = new Hono()
         return c.json({ error: 'Unauthorized' }, 401);
       }
 
-      const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
-        Query.equal('workspaceId', workspaceId),
-      ]);
+      const members = await databases.listDocuments<Member>(
+        DATABASE_ID,
+        MEMBERS_ID,
+        [Query.equal('workspaceId', workspaceId)],
+      );
 
       const populatedMembers = await Promise.all(
         members.documents.map(async (member) => {
@@ -46,15 +48,15 @@ const app = new Hono()
             name: user.name,
             email: user.email,
           };
-        })
+        }),
       );
       return c.json({
         data: {
-          ...member,
+          ...members,
           documents: populatedMembers,
         },
       });
-    }
+    },
   )
   .delete('/:memberId', sessionMiddleware, async (c) => {
     const { memberId } = c.req.param();
@@ -64,13 +66,13 @@ const app = new Hono()
     const memberToDelete = await databases.getDocument(
       DATABASE_ID,
       MEMBERS_ID,
-      memberId
+      memberId,
     );
 
     const allMembersInWorkspace = await databases.listDocuments(
       DATABASE_ID,
       MEMBERS_ID,
-      [Query.equal('workspaceId', memberToDelete.workspaceId)]
+      [Query.equal('workspaceId', memberToDelete.workspaceId)],
     );
 
     const member = await getMember({
@@ -106,7 +108,7 @@ const app = new Hono()
       'json',
       z.object({
         role: z.nativeEnum(MemberRole),
-      })
+      }),
     ),
     async (c) => {
       const { memberId } = c.req.param();
@@ -117,13 +119,13 @@ const app = new Hono()
       const memberToUpdate = await databases.getDocument(
         DATABASE_ID,
         MEMBERS_ID,
-        memberId
+        memberId,
       );
 
       const allMembersInWorkspace = await databases.listDocuments(
         DATABASE_ID,
         MEMBERS_ID,
-        [Query.equal('workspaceId', memberToUpdate.workspaceId)]
+        [Query.equal('workspaceId', memberToUpdate.workspaceId)],
       );
 
       const member = await getMember({
@@ -153,6 +155,6 @@ const app = new Hono()
           $id: memberToUpdate.$id,
         },
       });
-    }
+    },
   );
 export default app;
