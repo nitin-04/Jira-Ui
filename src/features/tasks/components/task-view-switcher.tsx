@@ -18,6 +18,7 @@ import { DataKanban } from './data-kanban';
 import { TaskStatus } from '../types';
 import { useBulkUpdateTasks } from '../api/use-bulk-update-tasks';
 import { DataFilters } from './data-filters';
+import { useProjectId } from '@/features/projects/hooks/use-project-id';
 
 interface TaskViewSwitcherProps {
   hideProjectFilter?: boolean;
@@ -33,6 +34,8 @@ export const TaskViewSwitcher = ({
   });
 
   const workspaceId = useWorkspaceId();
+
+  const paramProjectId = useProjectId();
   const { open } = useCreateTaskModal();
 
   const { mutate: bulkUpdate } = useBulkUpdateTasks();
@@ -41,7 +44,7 @@ export const TaskViewSwitcher = ({
     workspaceId,
     status,
     assigneeId,
-    projectId,
+    projectId: paramProjectId || projectId,
     dueDate,
   });
 
@@ -53,6 +56,7 @@ export const TaskViewSwitcher = ({
     },
     [bulkUpdate],
   );
+
   return (
     <Tabs
       defaultValue={view}
