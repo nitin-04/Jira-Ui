@@ -446,7 +446,7 @@ const app = new Hono()
       ],
     );
 
-    const overdueTaskCount = thisMonthCompletedTasks.total;
+    const overdueTaskCount = thisMonthOverdueTasks.total;
     const overdueTaskDifference =
       overdueTaskCount - lastMonthOverdueTasks.total;
 

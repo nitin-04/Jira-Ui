@@ -47,7 +47,7 @@ const CustomToolbar = ({ date, onNavigate }: CustomToolbarProps) => {
         size="icon"
         // className="flex items-center"
       >
-        <ChevronLeftIcon className='"size-4' />
+        <ChevronLeftIcon className="size-4" />
       </Button>
 
       <div className="flex items-center border border-input rounded-md px-3 py-2 h-8 justify-center w-full lg:w-auto">
@@ -61,7 +61,7 @@ const CustomToolbar = ({ date, onNavigate }: CustomToolbarProps) => {
         size="icon"
         // className="flex items-center"
       >
-        <ChevronRightIcon className='"size-4' />
+        <ChevronRightIcon className="size-4" />
       </Button>
     </div>
   );

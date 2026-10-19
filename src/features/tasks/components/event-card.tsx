@@ -5,11 +5,12 @@ import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
 import { TaskStatus } from '../types';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { Member } from '@/features/members/types';
 
 interface EventCardProps {
   title: string;
-  assignee: any;
-  project: Project;
+  assignee?: Member;
+  project?: Project;
   status: TaskStatus;
   id: string;
 }
@@ -48,10 +49,13 @@ export const EventCard = ({
       >
         <p>{title}</p>
         <div className="flex items-center gap-x-1">
-          <MemberAvatar name={assignee?.name} />
+          <MemberAvatar name={assignee?.name ?? 'Assignee'} />
           <div className="size-1 rounded-full bg-neutral-300" />
 
-          <ProjectAvatar name={project?.name} image={project?.imageUrl} />
+          <ProjectAvatar
+            name={project?.name ?? 'Project'}
+            image={project?.imageUrl}
+          />
         </div>
       </div>
     </div>

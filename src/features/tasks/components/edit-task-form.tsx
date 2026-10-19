@@ -6,10 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useRef } from 'react';
-import Image from 'next/image';
-import { Avatar } from '@/components/ui/avatar';
-import { AvatarFallback } from '@radix-ui/react-avatar';
-import { ImageIcon } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DottedSeparator } from '@/components/dotted-separator';
@@ -21,7 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useRouter } from 'next/navigation';
+
 import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
 import { useCreateTask } from '../api/use-create-task';
 import { createTaskSchema } from '../schemas';
@@ -51,8 +47,6 @@ export const EditTaskForm = ({
   memberOptions,
   initialValues,
 }: EditTaskFormProps) => {
-  const workspaceId = useWorkspaceId();
-  const router = useRouter();
   const { mutate, isPending } = useUpdateTask();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -85,7 +79,7 @@ export const EditTaskForm = ({
           form.reset();
           onCancel?.();
         },
-      }
+      },
     );
   };
 

@@ -9,6 +9,7 @@ import z from 'zod';
 import { Task, TaskStatus } from '../types';
 import { createAdminClient } from '@/lib/appwrite';
 import { Project } from '@/features/projects/types';
+import { Member } from '@/features/members/types';
 
 const app = new Hono()
 
@@ -110,7 +111,7 @@ const app = new Hono()
         projectIds.length > 0 ? [Query.contains('$id', projectIds)] : [],
       );
 
-      const members = await databases.listDocuments(
+      const members = await databases.listDocuments<Member>(
         DATABASE_ID,
         MEMBERS_ID,
         assigneeIds.length > 0 ? [Query.contains('$id', assigneeIds)] : [],
@@ -279,7 +280,7 @@ const app = new Hono()
       task.projectId,
     );
 
-    const member = await databases.getDocument(
+    const member = await databases.getDocument<Member>(
       DATABASE_ID,
       MEMBERS_ID,
       task.assigneeId,

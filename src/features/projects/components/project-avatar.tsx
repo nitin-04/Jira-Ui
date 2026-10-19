@@ -5,14 +5,14 @@ import Image from 'next/image';
 
 interface ProjectAvatarProps {
   image?: string;
-  name: string;
+  name?: string;
   className?: string;
   fallbackClassName?: string;
 }
 
 export const ProjectAvatar = ({
   image,
-  name,
+  name = 'Project',
   className,
   fallbackClassName,
 }: ProjectAvatarProps) => {
@@ -35,7 +35,7 @@ export const ProjectAvatar = ({
           fallbackClassName
         )}
       >
-        {name[0]}
+        {name[0] ?? 'P'}
       </AvatarFallback>
     </Avatar>
   );

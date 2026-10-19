@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { handle } from 'hono/vercel';
 
 import auth from '@/features/auth/server/route';
 import workspaces from '@/features/workspaces/server/route';
@@ -16,12 +15,12 @@ const routes = app
   .route('/projects', projects)
   .route('/tasks', tasks);
 
-export const GET = handle(app);
-export const POST = handle(app);
-export const PUT = handle(app);
-export const PATCH = handle(app);
-export const DELETE = handle(app);
-export const HEAD = handle(app);
-export const OPTIONS = handle(app);
+export const GET = (req: Request) => app.fetch(req);
+export const POST = (req: Request) => app.fetch(req);
+export const PUT = (req: Request) => app.fetch(req);
+export const PATCH = (req: Request) => app.fetch(req);
+export const DELETE = (req: Request) => app.fetch(req);
+export const HEAD = (req: Request) => app.fetch(req);
+export const OPTIONS = (req: Request) => app.fetch(req);
 
 export type AppType = typeof routes;

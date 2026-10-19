@@ -273,7 +273,7 @@ export const EditProjectForm = ({
               className="mt-6 w-fit ml-auto"
               size="sm"
               variant="destructive"
-              disabled={isPending}
+              disabled={isPending || isDeletingProject}
               onClick={handleDelete}
             >
               <TrashIcon className="size-4 mr-2" />

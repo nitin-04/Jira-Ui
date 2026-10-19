@@ -4,13 +4,13 @@ import { cn } from '@/lib/utils';
 
 interface MemberAvatarProps {
   //   image?: string;
-  name: string;
+  name?: string;
   className?: string;
   fallbackClassName?: string;
 }
 
 export const MemberAvatar = ({
-  name,
+  name = 'Member',
   className,
   fallbackClassName,
 }: MemberAvatarProps) => {
@@ -27,7 +27,7 @@ export const MemberAvatar = ({
           fallbackClassName
         )}
       >
-        {name.charAt(0).toUpperCase()}
+        {name ? name.charAt(0).toUpperCase() : '?'}
       </AvatarFallback>
     </Avatar>
   );

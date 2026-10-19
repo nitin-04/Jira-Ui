@@ -20,7 +20,7 @@ export const Kanbancard = ({ task }: KanbanCardProps) => {
       <DottedSeparator />
 
       <div className=" flex items-center gap-x-1.5">
-        <MemberAvatar name={task.assignee.name} />
+        <MemberAvatar name={task.assignee?.name} />
       </div>
     </div>
   );
