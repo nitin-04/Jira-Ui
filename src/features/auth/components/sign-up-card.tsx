@@ -27,6 +27,7 @@ import Link from 'next/link';
 import { registerSchema } from '../schemas';
 import { use } from 'react';
 import { useRegister } from '../api/use-register';
+import { signUpWithGithub, signUpWithGoogle } from '@/lib/oauth';
 
 export const SignUpCard = () => {
   const { mutate, isPending } = useRegister();
@@ -127,6 +128,7 @@ export const SignUpCard = () => {
       </div>
       <CardContent className="p-7 flex flex-col gap-y-4">
         <Button
+          onClick={() => signUpWithGoogle}
           disabled={isPending}
           variant="secondary"
           size="lg"
@@ -136,6 +138,7 @@ export const SignUpCard = () => {
           Login with Google
         </Button>
         <Button
+          onClick={() => signUpWithGithub}
           disabled={isPending}
           variant="secondary"
           size="lg"
