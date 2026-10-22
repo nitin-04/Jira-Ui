@@ -9,7 +9,7 @@ import { useCreateTaskModal } from '../hooks/use-create-task-modal';
 import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
 import { useGetTasks } from '../api/use-get-tasks';
 import { useQueryState } from 'nuqs';
-import { DataCalender } from './data-calender';
+import { DataCalendar } from './data-calendar';
 
 import { useTaskFilters } from '../hooks/use-task-filters';
 import { DataTable } from './data-table';
@@ -61,32 +61,32 @@ export const TaskViewSwitcher = ({
     <Tabs
       defaultValue={view}
       onValueChange={setView}
-      className="flex-1 w-full border rounded-lg"
+      className="flex-1 w-full border border-border/80 bg-card rounded-xl shadow-xs"
     >
-      <div className="h-full flex flex-col overflow-auto p-4">
-        <div className="flex flex-col gap-y-2 lg:flex-row justify-between ">
-          <TabsList className="w-full lg:w-auto">
-            <TabsTrigger className="h-8 w-full lg:w-auto" value="table">
+      <div className="h-full flex flex-col overflow-auto p-4 sm:p-5">
+        <div className="flex flex-col gap-y-3 sm:flex-row justify-between items-stretch sm:items-center">
+          <TabsList className="w-full sm:w-auto h-9 p-1 bg-neutral-100 dark:bg-neutral-800/80">
+            <TabsTrigger className="h-7 w-full sm:w-auto text-xs font-medium" value="table">
               Table
             </TabsTrigger>
-            <TabsTrigger className="h-8 w-full lg:w-auto" value="kanban">
+            <TabsTrigger className="h-7 w-full sm:w-auto text-xs font-medium" value="kanban">
               Kanban
             </TabsTrigger>
-            <TabsTrigger className="h-8 w-full lg:w-auto" value="calendar">
+            <TabsTrigger className="h-7 w-full sm:w-auto text-xs font-medium" value="calendar">
               Calendar
             </TabsTrigger>
           </TabsList>
-          <Button onClick={open} size="sm" className="w-full lg:w-auto">
-            <PlusIcon className="size-4 mr-2" />
-            New Task
+          <Button onClick={() => open()} size="sm" className="w-full sm:w-auto h-8 text-xs font-medium gap-x-1.5">
+            <PlusIcon className="size-3.5" />
+            <span>New Task</span>
           </Button>
         </div>
         <DottedSeparator className="my-4" />
         <DataFilters hideProjectFilter={hideProjectFilter} />
         <DottedSeparator className="my-4" />
         {isLoadingTasks ? (
-          <div className="w-full border rounded-lg h-[200px] flex flex-col items-center justify-center">
-            <Loader className="size-5 animate-spin to-muted-foreground" />
+          <div className="w-full border rounded-lg h-[240px] flex flex-col items-center justify-center">
+            <Loader className="size-5 animate-spin text-muted-foreground" />
           </div>
         ) : (
           <>
@@ -100,7 +100,7 @@ export const TaskViewSwitcher = ({
               />
             </TabsContent>
             <TabsContent value="calendar" className="mt-0 h-full pb-4">
-              <DataCalender data={tasks?.documents ?? []} />
+              <DataCalendar data={tasks?.documents ?? []} />
             </TabsContent>
           </>
         )}

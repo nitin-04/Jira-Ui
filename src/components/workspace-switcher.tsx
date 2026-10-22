@@ -27,16 +27,22 @@ export const WorkspaceSwitcher = () => {
 
   return (
     <div className="flex flex-col gap-y-2">
-      <div className="flex items-center justify-between">
-        <p className="text-xs uppercase text-neutral-500">Workspaces</p>
-        <RiAddCircleFill
+      <div className="flex items-center justify-between px-1">
+        <p className="text-xs uppercase font-semibold tracking-wider text-muted-foreground">
+          Workspaces
+        </p>
+        <button
+          type="button"
           onClick={open}
-          className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition"
-        />
+          className="text-muted-foreground hover:text-foreground transition cursor-pointer"
+          title="Create Workspace"
+        >
+          <RiAddCircleFill className="size-5" />
+        </button>
       </div>
 
       <Select onValueChange={onSelect} value={workspaceId}>
-        <SelectTrigger className="w-full bg-neutral-200 font-medium p-1">
+        <SelectTrigger className="w-full bg-neutral-200/70 dark:bg-neutral-800/80 border-border/60 font-medium p-2 h-10">
           <SelectValue placeholder="Select a workspace" />
         </SelectTrigger>
         <SelectContent>
@@ -46,6 +52,7 @@ export const WorkspaceSwitcher = () => {
                 <WorkspaceAvatar
                   name={workspace.name}
                   image={workspace.imageUrl}
+                  className="size-6 shrink-0"
                 />
                 <span className="truncate">{workspace.name}</span>
               </div>

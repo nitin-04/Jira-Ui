@@ -15,13 +15,16 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
     <main className="bg-neutral-100 min-h-screen">
       <div className="mx-auto max-w-screen-2xl p-4">
         <nav className="flex justify-between items-center">
-          <Image
-            src="/logo.svg"
-            alt="Logo"
-            width={50}
-            height={10}
-            className="mb-8"
-          />
+          <Link href="/" className="flex items-center gap-2.5">
+            <Image
+              src="/logo.svg"
+              alt="Logo"
+              width={28}
+              height={36}
+              className="w-auto h-7"
+            />
+            <span className="font-bold text-xl tracking-tight text-neutral-900">Jira</span>
+          </Link>
           <Button asChild variant="secondary">
             <Link href={isSignIn ? '/sign-up' : '/sign-in'}>
               {isSignIn ? 'Sign Up' : 'Login'}

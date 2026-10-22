@@ -2,7 +2,7 @@ import { sessionMiddleware } from '@/lib/session-middleware';
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { createTaskSchema } from '../schemas';
-import { getMember } from '@/features/members/utlis';
+import { getMember } from '@/features/members/utils';
 import { DATABASE_ID, MEMBERS_ID, PROJECTS_ID, TASKS_ID } from '@/config';
 import { ID, Query } from 'node-appwrite';
 import z from 'zod';
@@ -77,23 +77,18 @@ const app = new Hono()
       ];
 
       if (projectId) {
-        console.log('projectId', projectId);
         query.push(Query.equal('projectId', projectId));
       }
       if (status) {
-        console.log('status', status);
         query.push(Query.equal('status', status));
       }
       if (assigneeId) {
-        console.log('assigneeId', assigneeId);
         query.push(Query.equal('assigneeId', assigneeId));
       }
       if (dueDate) {
-        console.log('dueDate', dueDate);
         query.push(Query.equal('dueDate', dueDate));
       }
       if (search) {
-        console.log('search', search);
         query.push(Query.search('name', search));
       }
       const tasks = await databases.listDocuments<Task>(
@@ -179,7 +174,7 @@ const app = new Hono()
         [
           Query.equal('status', status),
           Query.equal('workspaceId', workspaceId),
-          Query.orderAsc('position'),
+          Query.orderDesc('position'),
           Query.limit(1),
         ],
       );
@@ -335,13 +330,17 @@ const app = new Hono()
         ],
       );
 
+      if (tasksToUpdate.documents.length === 0) {
+        return c.json({ error: 'Tasks not found' }, 404);
+      }
+
       const workspaceIds = new Set(
         tasksToUpdate.documents.map((task) => task.workspaceId),
       );
       if (workspaceIds.size !== 1) {
         return c.json({
-          error: ' All tasks must belong to the same workspace',
-        });
+          error: 'All tasks must belong to the same workspace',
+        }, 400);
       }
 
       const workspaceId = tasksToUpdate.documents[0].workspaceId;
@@ -353,7 +352,7 @@ const app = new Hono()
       });
 
       if (!member) {
-        return c.json({ error: 'unauthorized' }, 401);
+        return c.json({ error: 'Unauthorized' }, 401);
       }
 
       const updatedTasks = await Promise.all(

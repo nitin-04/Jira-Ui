@@ -10,41 +10,56 @@ import { useCreateProjectModal } from '@/features/projects/hooks/use-create-proj
 import { ProjectAvatar } from '@/features/projects/components/project-avatar';
 
 export const Projects = () => {
-  const projectId = null;
-
   const pathname = usePathname();
   const { open } = useCreateProjectModal();
   const workspaceId = useWorkspaceId();
   const { data } = useGetProjects({
     workspaceId,
   });
+
   return (
     <div className="flex flex-col gap-y-2">
-      <div className="flex items-center justify-between">
-        <p className="text-xs uppercase text-neutral-500">Projects</p>
-        <RiAddCircleFill
+      <div className="flex items-center justify-between px-1">
+        <p className="text-xs uppercase font-semibold tracking-wider text-muted-foreground">
+          Projects
+        </p>
+        <button
+          type="button"
           onClick={open}
-          className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition"
-        />
+          className="text-muted-foreground hover:text-foreground transition cursor-pointer"
+          title="Create Project"
+        >
+          <RiAddCircleFill className="size-5" />
+        </button>
       </div>
-      {data?.documents.map((project) => {
-        const href = `/workspaces/${workspaceId}/projects/${project.$id}`;
-        const isActive = pathname === href;
 
-        return (
-          <Link href={href} key={project.$id}>
-            <div
-              className={cn(
-                'flex items-center gap-2.5 p-2.5 rounded-md hover:opacity-75 transition cursor-pointer text-neutral-500',
-                isActive && 'bg-white shadow-sm hover:opacity-100 text-primary'
-              )}
-            >
-              <ProjectAvatar name={project.name} image={project.imageUrl} />
-              <span className="truncate">{project.name}</span>
-            </div>
-          </Link>
-        );
-      })}
+      <div className="flex flex-col gap-y-1">
+        {data?.documents.map((project) => {
+          const href = `/workspaces/${workspaceId}/projects/${project.$id}`;
+          const isActive = pathname === href;
+
+          return (
+            <Link href={href} key={project.$id}>
+              <div
+                className={cn(
+                  'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-200/40 dark:hover:bg-neutral-800/40',
+                  isActive &&
+                    'bg-neutral-200/80 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xs font-semibold'
+                )}
+              >
+                <ProjectAvatar name={project.name} image={project.imageUrl} className="size-5 shrink-0" />
+                <span className="truncate">{project.name}</span>
+              </div>
+            </Link>
+          );
+        })}
+
+        {data?.documents.length === 0 && (
+          <p className="text-xs text-muted-foreground px-3 py-2 italic">
+            No projects yet
+          </p>
+        )}
+      </div>
     </div>
   );
 };

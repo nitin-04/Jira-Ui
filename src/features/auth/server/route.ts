@@ -7,7 +7,6 @@ import { createAdminClient } from '@/lib/appwrite';
 
 import { loginSchema, registerSchema } from '../schemas';
 import { AUTH_COOKIE } from '../constants';
-import { success } from 'zod';
 import { sessionMiddleware } from '@/lib/session-middleware';
 
 const app = new Hono()
@@ -19,7 +18,6 @@ const app = new Hono()
 
   .post('/login', zValidator('json', loginSchema), async (c) => {
     const { email, password } = c.req.valid('json');
-    // console.log({ email, password });
 
     const { account } = await createAdminClient();
     const session = await account.createEmailPasswordSession(email, password);
@@ -27,7 +25,7 @@ const app = new Hono()
     setCookie(c, AUTH_COOKIE, session.secret, {
       path: '/',
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 60 * 60 * 24 * 30,
     });
@@ -37,7 +35,6 @@ const app = new Hono()
 
   .post('/register', zValidator('json', registerSchema), async (c) => {
     const { name, email, password } = c.req.valid('json');
-    console.log({ name, email, password });
 
     const { account } = await createAdminClient();
     await account.create(ID.unique(), email, password, name);
@@ -47,7 +44,7 @@ const app = new Hono()
     setCookie(c, AUTH_COOKIE, session.secret, {
       path: '/',
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 60 * 60 * 24 * 30,
     });

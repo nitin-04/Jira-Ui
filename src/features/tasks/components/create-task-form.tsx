@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useRef } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DottedSeparator } from '@/components/dotted-separator';
@@ -36,17 +35,17 @@ interface CreateTaskFormProps {
   onCancel?: () => void;
   projectOptions: { id: string; name: string; imageUrl: string }[];
   memberOptions: { id: string; name: string }[];
+  initialStatus?: TaskStatus;
 }
 
-export const CreateProjectForm = ({
+export const CreateTaskForm = ({
   onCancel,
   projectOptions,
   memberOptions,
+  initialStatus,
 }: CreateTaskFormProps) => {
   const workspaceId = useWorkspaceId();
   const { mutate, isPending } = useCreateTask();
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const formSchema = createTaskSchema.omit({ workspaceId: true });
 
@@ -54,6 +53,7 @@ export const CreateProjectForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      status: initialStatus ?? undefined,
     },
   });
 
@@ -240,3 +240,5 @@ export const CreateProjectForm = ({
     </Card>
   );
 };
+
+export const CreateProjectForm = CreateTaskForm;

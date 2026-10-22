@@ -56,6 +56,7 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
       {
         onSuccess: ({ data }) => {
           form.reset();
+          onCancel?.();
           router.push(`/workspaces/${workspaceId}/projects/${data.$id}`);
         },
       }
@@ -90,7 +91,7 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
                   <FormItem>
                     <FormLabel>Project Name</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter workspace name" />
+                      <Input {...field} placeholder="Enter project name" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -160,7 +161,7 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
                           <Button
                             type="button"
                             disabled={isPending}
-                            variant="teritary"
+                            variant="secondary"
                             size="xs"
                             className="w-fit mt-2 cursor-pointer"
                             onClick={() => inputRef.current?.click()}

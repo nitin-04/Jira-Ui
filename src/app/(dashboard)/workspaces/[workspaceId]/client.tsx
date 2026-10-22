@@ -1,11 +1,10 @@
 'use client';
 
 import { Analytics } from '@/components/analytics';
-import { DottedSeparator } from '@/components/dotted-separator';
 import { PageError } from '@/components/page-error';
 import { PageLoader } from '@/components/page-loader';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { useGetMembers } from '@/features/members/api/use-get-members';
 import { MemberAvatar } from '@/features/members/components/member-avatar';
 import { Member } from '@/features/members/types';
@@ -18,8 +17,17 @@ import { useCreateTaskModal } from '@/features/tasks/hooks/use-create-task-modal
 import { Task } from '@/features/tasks/types';
 import { useGetWorkspaceAnalytics } from '@/features/workspaces/api/use-get-workspace-analytics';
 import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
+import { snakeCasetoTitleCase } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
-import { CalendarIcon, PlusIcon, SettingsIcon } from 'lucide-react';
+import {
+  ArrowRightIcon,
+  CalendarIcon,
+  CheckCircle2Icon,
+  FolderGit2Icon,
+  PlusIcon,
+  SettingsIcon,
+  UsersIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 
 export const WorkspaceIdClient = () => {
@@ -52,12 +60,18 @@ export const WorkspaceIdClient = () => {
   }
 
   return (
-    <div>
+    <div className="h-full flex flex-col space-y-6">
       <Analytics data={analytics} />
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        <TaskList data={tasks.documents} total={tasks.total} />
-        <ProjectList data={projects.documents} total={projects.total} />
-        <MembersList data={members.documents} total={members.total} />
+
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div className="xl:col-span-7 flex flex-col">
+          <TaskList data={tasks.documents} total={tasks.total} />
+        </div>
+
+        <div className="xl:col-span-5 flex flex-col gap-y-6">
+          <ProjectList data={projects.documents} total={projects.total} />
+          <MembersList data={members.documents} total={members.total} />
+        </div>
       </div>
     </div>
   );
@@ -73,46 +87,114 @@ export const TaskList = ({ data, total }: TaskListProps) => {
   const { open: createTask } = useCreateTaskModal();
 
   return (
-    <div className="flex flex-col gap-y-4 col-span-1">
-      <div className="bg-muted rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <p className="text-lg font-semibold">Tasks ({total})</p>
-          <Button variant="muted" size="icon" onClick={createTask}>
-            <PlusIcon className="size-4 text-neutral-400" />
-          </Button>
+    <div className="bg-card border border-border/80 rounded-xl p-5 shadow-xs flex flex-col h-full">
+      <div className="flex items-center justify-between pb-4 border-b border-border/60">
+        <div className="flex items-center gap-x-2.5">
+          <p className="text-base font-semibold text-foreground">Tasks</p>
+          <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+            {total}
+          </span>
         </div>
-        <DottedSeparator className="my-4" />
-
-        <ul className="flex flex-col gap-y-4">
-          {data.map((task) => (
-            <li key={task.$id}>
-              <Link href={`/workspaces/${workspaceId}/tasks/${task.$id}`}>
-                <Card className="shadow-none rounded-lg hover:opacity-75 transition">
-                  <CardContent className="p-4">
-                    <p className="text-lg font-medium truncate">{task.name}</p>
-                    <div className="flex items-center gap-x-2">
-                      <p>{task.project?.name}</p>
-                      <div className="size-1 rounded-full bg-neutral-300" />
-                      <div className="text-sm text-muted-foreground flex items-center">
-                        <CalendarIcon className="size-3 mr-1" />
-                        <span className="truncate">
-                          {formatDistanceToNow(new Date(task.dueDate))}
-                        </span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </li>
-          ))}
-          <li className="text-sm text-muted-foreground text-center hidden first-of-type:block">
-            No tasks found
-          </li>
-        </ul>
-        <Button className="mt-4 w-full" asChild>
-          <Link href={`/workspaces/${workspaceId}/tasks`}>Show All</Link>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => createTask()}
+          className="gap-x-1.5 h-8 text-xs font-medium"
+        >
+          <PlusIcon className="size-3.5" />
+          <span>New Task</span>
         </Button>
       </div>
+
+      {data.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="size-12 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-3">
+            <CheckCircle2Icon className="size-6 text-muted-foreground" />
+          </div>
+          <p className="text-sm font-medium text-foreground">No tasks found</p>
+          <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+            Create tasks to track your workspace deliverables and deadlines.
+          </p>
+          <Button
+            size="sm"
+            onClick={() => createTask()}
+            className="mt-4 gap-x-1.5 h-8 text-xs"
+          >
+            <PlusIcon className="size-3.5" />
+            Create your first task
+          </Button>
+        </div>
+      ) : (
+        <ul className="flex flex-col gap-y-2.5 my-4 flex-1">
+          {data.slice(0, 6).map((task) => {
+            const dueDate = task.dueDate ? new Date(task.dueDate) : null;
+            const isValidDate = dueDate && !isNaN(dueDate.getTime());
+
+            return (
+              <li key={task.$id}>
+                <Link
+                  href={`/workspaces/${workspaceId}/tasks/${task.$id}`}
+                  className="block group"
+                >
+                  <div className="p-3.5 rounded-lg border border-border/70 bg-card hover:bg-neutral-50/70 dark:hover:bg-neutral-900/60 hover:border-neutral-300 dark:hover:border-neutral-700 transition flex items-center justify-between gap-x-4">
+                    <div className="flex flex-col gap-y-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground group-hover:text-primary transition truncate">
+                        {task.name}
+                      </p>
+                      <div className="flex items-center gap-x-2 text-xs text-muted-foreground">
+                        {task.project && (
+                          <div className="flex items-center gap-x-1.5">
+                            <ProjectAvatar
+                              className="size-3.5"
+                              fallbackClassName="text-[8px]"
+                              name={task.project.name}
+                              image={task.project.imageUrl}
+                            />
+                            <span className="truncate max-w-[120px]">
+                              {task.project.name}
+                            </span>
+                          </div>
+                        )}
+                        {task.project && isValidDate && (
+                          <span className="size-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
+                        )}
+                        {isValidDate && (
+                          <div className="flex items-center gap-x-1">
+                            <CalendarIcon className="size-3" />
+                            <span>
+                              {formatDistanceToNow(dueDate, { addSuffix: true })}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-x-2.5 shrink-0">
+                      <Badge variant={task.status} className="text-[11px] font-medium py-0 px-2 h-5">
+                        {snakeCasetoTitleCase(task.status)}
+                      </Badge>
+                      <MemberAvatar
+                        name={task.assignee?.name}
+                        className="size-6"
+                        fallbackClassName="text-[10px]"
+                      />
+                    </div>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+      {data.length > 0 && (
+        <Button variant="outline" className="w-full mt-auto h-9 text-xs" asChild>
+          <Link href={`/workspaces/${workspaceId}/tasks`} className="flex items-center justify-center gap-x-1.5">
+            <span>View All Tasks ({total})</span>
+            <ArrowRightIcon className="size-3.5" />
+          </Link>
+        </Button>
+      )}
     </div>
   );
 };
@@ -127,41 +209,69 @@ export const ProjectList = ({ data, total }: ProjectListProps) => {
   const { open: createProject } = useCreateProjectModal();
 
   return (
-    <div className="flex flex-col gap-y-4 col-span-1">
-      <div className="bg-white border rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <p className="text-lg font-semibold">Projects ({total})</p>
-          <Button variant="secondary" size="icon" onClick={createProject}>
-            <PlusIcon className="size-4 text-neutral-400" />
+    <div className="bg-card border border-border/80 rounded-xl p-5 shadow-xs flex flex-col">
+      <div className="flex items-center justify-between pb-4 border-b border-border/60">
+        <div className="flex items-center gap-x-2.5">
+          <p className="text-base font-semibold text-foreground">Projects</p>
+          <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+            {total}
+          </span>
+        </div>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={createProject}
+          className="gap-x-1.5 h-8 text-xs font-medium"
+        >
+          <PlusIcon className="size-3.5" />
+          <span>New Project</span>
+        </Button>
+      </div>
+
+      {data.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="size-10 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-2.5">
+            <FolderGit2Icon className="size-5 text-muted-foreground" />
+          </div>
+          <p className="text-sm font-medium text-foreground">No projects yet</p>
+          <p className="text-xs text-muted-foreground mt-0.5 max-w-xs">
+            Organize tasks into projects for your team.
+          </p>
+          <Button
+            size="sm"
+            onClick={createProject}
+            className="mt-3 gap-x-1.5 h-8 text-xs"
+          >
+            <PlusIcon className="size-3.5" />
+            Create Project
           </Button>
         </div>
-        <DottedSeparator className="my-4" />
-
-        <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {data.map((project) => (
+      ) : (
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
+          {data.slice(0, 6).map((project) => (
             <li key={project.$id}>
-              <Link href={`/workspaces/${workspaceId}/projects/${project.$id}`}>
-                <Card className="shadow-none rounded-lg hover:opacity-75 transition">
-                  <CardContent className="p-4 flex items-center gap-x-2.5">
-                    <ProjectAvatar
-                      className="size-12"
-                      fallbackClassName="text-lg"
-                      name={project.name}
-                      image={project.imageUrl}
-                    />
-                    <p className="text-lg font-medium truncate">
+              <Link
+                href={`/workspaces/${workspaceId}/projects/${project.$id}`}
+                className="block group"
+              >
+                <div className="p-3 rounded-lg border border-border/70 bg-card hover:bg-neutral-50/70 dark:hover:bg-neutral-900/60 hover:border-neutral-300 dark:hover:border-neutral-700 transition flex items-center gap-x-3">
+                  <ProjectAvatar
+                    className="size-8 rounded-lg"
+                    fallbackClassName="text-sm"
+                    name={project.name}
+                    image={project.imageUrl}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-foreground group-hover:text-primary transition truncate">
                       {project.name}
                     </p>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </Link>
             </li>
           ))}
-          <li className="text-sm text-muted-foreground text-center hidden first-of-type:block">
-            No projects found
-          </li>
         </ul>
-      </div>
+      )}
     </div>
   );
 };
@@ -175,41 +285,48 @@ export const MembersList = ({ data, total }: MembersListProps) => {
   const workspaceId = useWorkspaceId();
 
   return (
-    <div className="flex flex-col gap-y-4 col-span-1">
-      <div className="bg-white border rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <p className="text-lg font-semibold">Members ({total})</p>
-          <Button asChild variant="secondary" size="icon">
-            <Link href={`/workspaces/${workspaceId}/members`}>
-              <SettingsIcon className="size-4 text-neutral-400" />
-            </Link>
-          </Button>
+    <div className="bg-card border border-border/80 rounded-xl p-5 shadow-xs flex flex-col">
+      <div className="flex items-center justify-between pb-4 border-b border-border/60">
+        <div className="flex items-center gap-x-2.5">
+          <p className="text-base font-semibold text-foreground">Team Members</p>
+          <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+            {total}
+          </span>
         </div>
-        <DottedSeparator className="my-4" />
+        <Button asChild variant="ghost" size="sm" className="h-8 text-xs gap-x-1.5 text-muted-foreground hover:text-foreground">
+          <Link href={`/workspaces/${workspaceId}/members`}>
+            <SettingsIcon className="size-3.5" />
+            <span>Manage</span>
+          </Link>
+        </Button>
+      </div>
 
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {data.map((member) => (
+      {data.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="size-10 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-2.5">
+            <UsersIcon className="size-5 text-muted-foreground" />
+          </div>
+          <p className="text-sm font-medium text-foreground">No members found</p>
+        </div>
+      ) : (
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
+          {data.slice(0, 6).map((member) => (
             <li key={member.$id}>
-              <Card className="shadow-none rounded-lg overflow-hidden">
-                <CardContent className="p-4 flex flex-col items-center gap-x-2">
-                  <MemberAvatar className="size-12" name={member.name} />
-                  <div className="flex flex-col items-center overflow-hidden">
-                    <p className="text-lg font-medium line-clamp-1">
-                      {member.name}
-                    </p>
-                    <p className="text-sm text-muted-foreground line-clamp-1">
-                      {member.email}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="p-3 rounded-lg border border-border/70 bg-card flex items-center gap-x-3">
+                <MemberAvatar className="size-8" name={member.name} />
+                <div className="flex flex-col min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">
+                    {member.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {member.email}
+                  </p>
+                </div>
+              </div>
             </li>
           ))}
-          <li className="text-sm text-muted-foreground text-center hidden first-of-type:block">
-            No members found
-          </li>
         </ul>
-      </div>
+      )}
     </div>
   );
 };

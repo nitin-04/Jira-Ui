@@ -10,7 +10,6 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardFooter,
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -38,7 +37,6 @@ export const SignInCard = () => {
 
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
     mutate({ json: values });
-    console.log(values);
   };
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
@@ -47,7 +45,6 @@ export const SignInCard = () => {
       </CardHeader>
       <div className="px-7 mb-2">
         <DottedSeparator />
-        {/* <Separator /> */}
       </div>
 
       <CardContent className="p-7">
@@ -78,8 +75,7 @@ export const SignInCard = () => {
                     <Input
                       {...field}
                       type="password"
-                      placeholder="Enter 
-                      your password"
+                      placeholder="Enter your password"
                     />
                   </FormControl>
                   <FormMessage />
@@ -99,7 +95,7 @@ export const SignInCard = () => {
       </div>
       <CardContent className="p-7 flex flex-col gap-y-4">
         <Button
-          onClick={() => signUpWithGoogle}
+          onClick={() => signUpWithGoogle()}
           disabled={isPending}
           variant="secondary"
           size="lg"

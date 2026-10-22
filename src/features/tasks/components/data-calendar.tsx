@@ -29,7 +29,7 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-interface DataCalenderProps {
+interface DataCalendarProps {
   data: Task[];
 }
 
@@ -45,7 +45,6 @@ const CustomToolbar = ({ date, onNavigate }: CustomToolbarProps) => {
         onClick={() => onNavigate('PREV')}
         variant="secondary"
         size="icon"
-        // className="flex items-center"
       >
         <ChevronLeftIcon className="size-4" />
       </Button>
@@ -59,7 +58,6 @@ const CustomToolbar = ({ date, onNavigate }: CustomToolbarProps) => {
         onClick={() => onNavigate('NEXT')}
         variant="secondary"
         size="icon"
-        // className="flex items-center"
       >
         <ChevronRightIcon className="size-4" />
       </Button>
@@ -67,9 +65,9 @@ const CustomToolbar = ({ date, onNavigate }: CustomToolbarProps) => {
   );
 };
 
-export const DataCalender = ({ data }: DataCalenderProps) => {
+export const DataCalendar = ({ data }: DataCalendarProps) => {
   const [value, setValue] = useState(
-    data.length > 0 ? new Date(data[0].dueDate) : new Date(),
+    data.length > 0 && data[0].dueDate ? new Date(data[0].dueDate) : new Date(),
   );
 
   const events = data.map((task) => ({
@@ -124,3 +122,5 @@ export const DataCalender = ({ data }: DataCalenderProps) => {
     />
   );
 };
+
+export const DataCalender = DataCalendar;

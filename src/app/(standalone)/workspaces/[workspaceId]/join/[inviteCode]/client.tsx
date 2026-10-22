@@ -15,7 +15,7 @@ export const WorkspaceIdJoinClient = () => {
   }
 
   if (!initialValues) {
-    return <PageError message="Project not found" />;
+    return <PageError message="Workspace not found" />;
   }
   return (
     <div className="w-full lg:max-w-xl">

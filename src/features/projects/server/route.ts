@@ -1,5 +1,6 @@
 import { DATABASE_ID, IMAGES_BUCKET_ID, PROJECTS_ID, TASKS_ID } from '@/config';
-import { getMember } from '@/features/members/utlis';
+import { getMember } from '@/features/members/utils';
+import { MemberRole } from '@/features/members/types';
 import { sessionMiddleware } from '@/lib/session-middleware';
 import { zValidator } from '@hono/zod-validator';
 import { endOfMonth, startOfMonth, subMonths } from 'date-fns';
@@ -157,7 +158,7 @@ const app = new Hono()
         userId: user.$id,
       });
 
-      if (!member) {
+      if (!member || member.role !== MemberRole.ADMIN) {
         return c.json(
           {
             error: 'Unauthorized',
@@ -224,7 +225,7 @@ const app = new Hono()
       userId: user.$id,
     });
 
-    if (!member) {
+    if (!member || member.role !== MemberRole.ADMIN) {
       return c.json({ error: 'Unauthorized' }, 401);
     }
     await databases.deleteDocument(DATABASE_ID, PROJECTS_ID, projectId);
@@ -386,7 +387,7 @@ const app = new Hono()
       ],
     );
 
-    const overdueTaskCount = thisMonthCompletedTasks.total;
+    const overdueTaskCount = thisMonthOverdueTasks.total;
     const overdueTaskDifference =
       overdueTaskCount - lastMonthOverdueTasks.total;
 

@@ -9,8 +9,15 @@ interface TaskDateProps {
 }
 
 export const TaskDate = ({ value, className }: TaskDateProps) => {
+  if (!value) return null;
+
   const today = new Date();
   const endDate = new Date(value);
+
+  if (isNaN(endDate.getTime())) {
+    return null;
+  }
+
   const diffInDays = differenceInDays(endDate, today);
 
   let textColor = 'text-muted-foreground';
@@ -21,9 +28,10 @@ export const TaskDate = ({ value, className }: TaskDateProps) => {
   } else if (diffInDays <= 14) {
     textColor = 'text-yellow-500';
   }
+
   return (
     <div className={textColor}>
-      <span className={cn('truncate', className)}>{format(value, 'PPP')}</span>
+      <span className={cn('truncate', className)}>{format(endDate, 'PPP')}</span>
     </div>
   );
 };

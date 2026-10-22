@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { PencilIcon, XIcon } from 'lucide-react';
 import { DottedSeparator } from '@/components/dotted-separator';
 import { useState } from 'react';
-import { useUpdateTask } from '../api/use-update-task ';
+import { useUpdateTask } from '../api/use-update-task';
 
 interface TaskDescriptionProps {
   task: Task;
@@ -51,7 +51,7 @@ export const TaskDescription = ({ task }: TaskDescriptionProps) => {
       {isEditing ? (
         <div className="flex flex-col gap-y-4">
           <Textarea
-            placeholder="Add a descrption..."
+            placeholder="Add a description..."
             value={value}
             rows={4}
             onChange={(e) => setValue(e.target.value)}

@@ -52,7 +52,7 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
       {
         onSuccess: ({ data }) => {
           form.reset();
-          // onCancel?.();
+          onCancel?.();
           router.push(`/workspaces/${data.$id}`);
         },
       }
@@ -157,7 +157,7 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
                           <Button
                             type="button"
                             disabled={isPending}
-                            variant="teritary"
+                            variant="secondary"
                             size="xs"
                             className="w-fit mt-2 cursor-pointer"
                             onClick={() => inputRef.current?.click()}

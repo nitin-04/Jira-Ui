@@ -16,7 +16,7 @@ import { useDeleteTask } from '../api/use-delete-task';
 import { useConfirm } from '@/hooks/use-confirm';
 
 import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
-import { useEditTaskModal } from '../hooks/use-edit-task-modal.';
+import { useEditTaskModal } from '../hooks/use-edit-task-modal';
 import { useRouter } from 'next/navigation';
 
 interface TaskActionsProps {
@@ -88,7 +88,7 @@ export const Taskactions = ({ id, projectId, children }: TaskActionsProps) => {
           <DropdownMenuItem
             onClick={onDelete}
             disabled={isPending}
-            className="text-amber-700 focus:text-amber-700 font-medium p-[10px]"
+            className="text-destructive focus:text-destructive font-medium p-[10px]"
           >
             <TrashIcon className="size-4 mr-2 stroke-2" />
             Delete Task

@@ -4,10 +4,9 @@ import { zValidator } from '@hono/zod-validator';
 
 import { sessionMiddleware } from '@/lib/session-middleware';
 import { createAdminClient } from '@/lib/appwrite';
-import { getMember } from '../utlis';
+import { getMember } from '../utils';
 import { DATABASE_ID, MEMBERS_ID } from '@/config';
 import { Query } from 'node-appwrite';
-import { error } from 'console';
 import { Member, MemberRole } from '../types';
 
 const app = new Hono()
@@ -26,8 +25,6 @@ const app = new Hono()
         workspaceId,
         userId: user.$id,
       });
-      console.log('Current User Role:', member?.role);
-      console.log('Expected Role:', MemberRole.ADMIN);
 
       if (!member) {
         return c.json({ error: 'Unauthorized' }, 401);
@@ -82,7 +79,7 @@ const app = new Hono()
     });
 
     if (!member) {
-      return c.json({ error: 'Unauthorized' }, 400);
+      return c.json({ error: 'Unauthorized' }, 401);
     }
 
     if (member.$id !== memberToDelete.$id && member.role !== MemberRole.ADMIN) {
@@ -135,7 +132,7 @@ const app = new Hono()
       });
 
       if (!member) {
-        return c.json({ error: 'Unauthorized' }, 400);
+        return c.json({ error: 'Unauthorized' }, 401);
       }
 
       if (member.role !== MemberRole.ADMIN) {

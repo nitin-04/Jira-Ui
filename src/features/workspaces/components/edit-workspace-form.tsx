@@ -94,7 +94,7 @@ export const EditWorkspaceForm = ({
       },
       {
         onSuccess: () => {
-          window.location.href = '/';
+          router.push('/');
         },
       },
     );
@@ -130,9 +130,11 @@ export const EditWorkspaceForm = ({
     }
   };
 
-  const fullInviteLink = `${window.location.origin}/workspaces/${initialValues.$id}/join/${initialValues.inviteCode}`;
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const fullInviteLink = `${origin}/workspaces/${initialValues.$id}/join/${initialValues.inviteCode}`;
 
   const handleCopyInviteLink = () => {
+    if (!fullInviteLink) return;
     navigator.clipboard
       .writeText(fullInviteLink)
       .then(() => toast.success('Invite link copied to clipboard'));
@@ -248,7 +250,7 @@ export const EditWorkspaceForm = ({
                             <Button
                               type="button"
                               disabled={isPending}
-                              variant="teritary"
+                              variant="secondary"
                               size="xs"
                               className="w-fit mt-2 cursor-pointer"
                               onClick={() => inputRef.current?.click()}

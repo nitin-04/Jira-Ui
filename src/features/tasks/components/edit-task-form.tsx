@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useRef } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DottedSeparator } from '@/components/dotted-separator';
@@ -18,8 +17,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id';
-import { useCreateTask } from '../api/use-create-task';
 import { createTaskSchema } from '../schemas';
 import { DatePicker } from '@/components/date-picker';
 import {
@@ -32,7 +29,7 @@ import {
 import { MemberAvatar } from '@/features/members/components/member-avatar';
 import { Task, TaskStatus } from '../types';
 import { ProjectAvatar } from '@/features/projects/components/project-avatar';
-import { useUpdateTask } from '../api/use-update-task ';
+import { useUpdateTask } from '../api/use-update-task';
 
 interface EditTaskFormProps {
   onCancel?: () => void;
@@ -48,8 +45,6 @@ export const EditTaskForm = ({
   initialValues,
 }: EditTaskFormProps) => {
   const { mutate, isPending } = useUpdateTask();
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const formSchema = createTaskSchema.omit({
     workspaceId: true,

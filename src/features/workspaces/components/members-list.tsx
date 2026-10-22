@@ -47,14 +47,9 @@ export const MembersList = () => {
 
     if (!ok) return;
 
-    deleteMember(
-      { param: { memberId } },
-      {
-        onSuccess: () => {
-          window.location.reload();
-        },
-      }
-    );
+    deleteMember({
+      param: { memberId },
+    });
   };
 
   return (
@@ -114,7 +109,7 @@ export const MembersList = () => {
                     Set as Member
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    className="font-medium text-amber-700"
+                    className="font-medium text-destructive focus:text-destructive"
                     onClick={() => handleDeleteMember(member.$id)}
                     disabled={isDeletingMember}
                   >

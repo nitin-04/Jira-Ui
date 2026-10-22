@@ -24,10 +24,7 @@ export const AnalyticsCard = ({
     <Card className="shadow-none border-none w-full">
       <CardHeader>
         <div className="flex items-center gap-x-2.5">
-          <CardDescription
-            className="flex
-          items-center gap-x-2 font-medium overflow-hidden"
-          >
+          <CardDescription className="flex items-center gap-x-2 font-medium overflow-hidden">
             <span className="truncate text-base">{title}</span>
           </CardDescription>
           <div className="flex items-center gap-x-1">
@@ -42,7 +39,7 @@ export const AnalyticsCard = ({
             </span>
           </div>
         </div>
-        <CardTitle className="3xl font-semibold">{value}</CardTitle>
+        <CardTitle className="text-3xl font-semibold">{value}</CardTitle>
       </CardHeader>
     </Card>
   );

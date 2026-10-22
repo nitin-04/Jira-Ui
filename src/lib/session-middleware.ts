@@ -26,6 +26,7 @@ type AdditionalContext = {
     user: Models.User<Models.Preferences>;
   };
 };
+
 export const sessionMiddleware = createMiddleware<AdditionalContext>(
   async (c, next) => {
     const client = new Client()
@@ -43,13 +44,17 @@ export const sessionMiddleware = createMiddleware<AdditionalContext>(
     const databases = new Databases(client);
     const storage = new Storage(client);
 
-    const user = await account.get();
+    try {
+      const user = await account.get();
 
-    c.set('account', account);
-    c.set('databases', databases);
-    c.set('storage', storage);
-    c.set('user', user);
+      c.set('account', account);
+      c.set('databases', databases);
+      c.set('storage', storage);
+      c.set('user', user);
 
-    await next();
+      await next();
+    } catch {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
   }
 );

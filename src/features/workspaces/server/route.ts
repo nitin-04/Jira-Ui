@@ -14,7 +14,7 @@ import { createWorkspaceSchema, updateWorkspaceSchema } from '../schemas';
 import { ID, Query } from 'node-appwrite';
 import { MemberRole } from '@/features/members/types';
 import { generateInviteCode } from '@/lib/utils';
-import { getMember } from '@/features/members/utlis';
+import { getMember } from '@/features/members/utils';
 import z from 'zod';
 import { Workspace } from '../types';
 import { endOfMonth, startOfMonth, subMonths } from 'date-fns';

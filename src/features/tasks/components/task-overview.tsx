@@ -7,7 +7,7 @@ import { MemberAvatar } from '@/features/members/components/member-avatar';
 import { TaskDate } from './task-date';
 import { Badge } from '@/components/ui/badge';
 import { snakeCasetoTitleCase } from '@/lib/utils';
-import { useEditTaskModal } from '../hooks/use-edit-task-modal.';
+import { useEditTaskModal } from '../hooks/use-edit-task-modal';
 
 interface TaskOverviewProps {
   task: Task;

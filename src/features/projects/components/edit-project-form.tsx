@@ -21,9 +21,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { AvatarFallback } from '@radix-ui/react-avatar';
 import {
   ArrowLeftIcon,
-  CopyIcon,
   ImageIcon,
-  RefreshCwIcon,
   TrashIcon,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -51,7 +49,7 @@ export const EditProjectForm = ({
 
   const [DeleteDialog, confirmDelete] = useConfirm(
     'Delete project',
-    'Are you sure you want to delete this workspace?',
+    'Are you sure you want to delete this project?',
     'destructive',
   );
 
@@ -83,7 +81,7 @@ export const EditProjectForm = ({
       },
       {
         onSuccess: () => {
-          window.location.href = `/workspaces/${initialValues.workspaceId}`;
+          router.push(`/workspaces/${initialValues.workspaceId}`);
         },
       },
     );
@@ -112,7 +110,6 @@ export const EditProjectForm = ({
   return (
     <div className="flex flex-col gap-y-4">
       <DeleteDialog />
-      {/* <ResetDialog /> */}
       <Card className="w-full h-full border-none shadow-none">
         <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
           <Button
@@ -222,7 +219,7 @@ export const EditProjectForm = ({
                             <Button
                               type="button"
                               disabled={isPending}
-                              variant="teritary"
+                              variant="secondary"
                               size="xs"
                               className="w-fit mt-2 cursor-pointer"
                               onClick={() => inputRef.current?.click()}

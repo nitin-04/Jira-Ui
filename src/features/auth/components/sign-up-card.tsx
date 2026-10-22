@@ -25,7 +25,6 @@ import {
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { registerSchema } from '../schemas';
-import { use } from 'react';
 import { useRegister } from '../api/use-register';
 import { signUpWithGithub, signUpWithGoogle } from '@/lib/oauth';
 
@@ -61,7 +60,6 @@ export const SignUpCard = () => {
       </CardHeader>
       <div className="px-7 mb-2">
         <DottedSeparator />
-        {/* <Separator /> */}
       </div>
 
       <CardContent className="p-7">
@@ -75,7 +73,7 @@ export const SignUpCard = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      type="name"
+                      type="text"
                       placeholder="Enter your name"
                     />
                   </FormControl>
@@ -128,7 +126,7 @@ export const SignUpCard = () => {
       </div>
       <CardContent className="p-7 flex flex-col gap-y-4">
         <Button
-          onClick={() => signUpWithGoogle}
+          onClick={() => signUpWithGoogle()}
           disabled={isPending}
           variant="secondary"
           size="lg"
@@ -138,7 +136,7 @@ export const SignUpCard = () => {
           Login with Google
         </Button>
         <Button
-          onClick={() => signUpWithGithub}
+          onClick={() => signUpWithGithub()}
           disabled={isPending}
           variant="secondary"
           size="lg"

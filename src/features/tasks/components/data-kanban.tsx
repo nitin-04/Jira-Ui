@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Task, TaskStatus } from '../types';
+import { cn } from '@/lib/utils';
 
 import {
   DragDropContext,
@@ -161,23 +162,26 @@ export const DataKanban = ({ data, onChange }: DataKanbanProps) => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex overflow-x-auto">
+      <div className="flex overflow-x-auto gap-x-3 pb-4">
         {boards.map((board) => {
           return (
             <div
               key={board}
-              className="flex-1 mx-2 bg-muted p-1.5 rounded-md min-w-[200px]"
+              className="flex-1 min-w-[240px] bg-neutral-100/60 dark:bg-neutral-900/50 border border-border/60 rounded-xl p-2 flex flex-col"
             >
               <KanbanColumnHeader
                 board={board}
                 taskCount={tasks[board].length}
               />
               <Droppable droppableId={board}>
-                {(provided) => (
+                {(provided, snapshot) => (
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    className="min-h=[200px py-1.5"
+                    className={cn(
+                      'min-h-[200px] py-1.5 px-0.5 rounded-lg transition-colors flex-1',
+                      snapshot.isDraggingOver && 'bg-neutral-200/40 dark:bg-neutral-800/40'
+                    )}
                   >
                     {tasks[board].map((task, index) => (
                       <Draggable

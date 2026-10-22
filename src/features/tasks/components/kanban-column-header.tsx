@@ -1,3 +1,5 @@
+'use client';
+
 import { snakeCasetoTitleCase } from '@/lib/utils';
 import { TaskStatus } from '../types';
 
@@ -19,17 +21,17 @@ interface KanbanColumnHeaderProps {
 
 const statusIconMap: Record<TaskStatus, React.ReactNode> = {
   [TaskStatus.BACKLOG]: (
-    <CircleDashedIcon className="size-[18px] text-pink-400" />
+    <CircleDashedIcon className="size-4 text-pink-500" />
   ),
-  [TaskStatus.TODO]: <CircleIcon className="size-[18px] text-red-400" />,
+  [TaskStatus.TODO]: <CircleIcon className="size-4 text-rose-500" />,
   [TaskStatus.IN_PROGRESS]: (
-    <CircleDotDashedIcon className="size-[18px] text-yellow-400" />
+    <CircleDotDashedIcon className="size-4 text-amber-500" />
   ),
   [TaskStatus.IN_REVIEW]: (
-    <CircleDotIcon className="size-[18px] text-blue-400" />
+    <CircleDotIcon className="size-4 text-blue-500" />
   ),
   [TaskStatus.DONE]: (
-    <CircleCheckIcon className="size-[18px] text-emerald-400" />
+    <CircleCheckIcon className="size-4 text-emerald-500" />
   ),
 };
 
@@ -41,17 +43,25 @@ export const KanbanColumnHeader = ({
   const icon = statusIconMap[board];
 
   return (
-    <div className="px-2 py-1.5 flex items-center justify-between">
+    <div className="px-2 py-2 mb-1 flex items-center justify-between">
       <div className="flex items-center gap-x-2">
         {icon}
-        <h2 className="text-sm font-medium">{snakeCasetoTitleCase(board)}</h2>
-        <div className="size-5 flex items-center justify-center rounded-md bg-neutral-200 text-xs text-neutral-700 font-medium">
+        <h2 className="text-sm font-semibold text-foreground tracking-tight">
+          {snakeCasetoTitleCase(board)}
+        </h2>
+        <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-[11px] text-neutral-600 dark:text-neutral-300 font-semibold">
           {taskCount}
-        </div>
+        </span>
       </div>
 
-      <Button className="size-5" onClick={open} variant="ghost" size="icon">
-        <PlusIcon className="size-4 text-neutral-500" />
+      <Button
+        className="size-6 rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-500 hover:text-foreground transition"
+        onClick={() => open(board)}
+        variant="ghost"
+        size="icon"
+        title={`Add task to ${snakeCasetoTitleCase(board)}`}
+      >
+        <PlusIcon className="size-4" />
       </Button>
     </div>
   );
