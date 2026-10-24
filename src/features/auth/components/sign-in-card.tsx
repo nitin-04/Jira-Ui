@@ -1,9 +1,12 @@
 'use client';
+
+import { useState } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
+import { Eye, EyeOff } from 'lucide-react';
 import { DottedSeparator } from '@/components/dotted-separator';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,6 +29,7 @@ import { useLogin } from '../api/use-login';
 import { signUpWithGithub, signUpWithGoogle } from '@/lib/oauth';
 
 export const SignInCard = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const { mutate, isPending } = useLogin();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -38,6 +42,7 @@ export const SignInCard = () => {
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
     mutate({ json: values });
   };
+
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
       <CardHeader className="flex items-center justify-center text-center p-7">
@@ -72,11 +77,26 @@ export const SignInCard = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="Enter your password"
-                    />
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Enter your password"
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer focus:outline-none"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="size-4" />
+                        ) : (
+                          <Eye className="size-4" />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
