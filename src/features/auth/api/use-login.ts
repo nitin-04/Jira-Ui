@@ -16,7 +16,8 @@ export const useLogin = () => {
     mutationFn: async ({ json }) => {
       const response = await client.api.auth.login['$post']({ json });
       if (!response.ok) {
-        throw new Error('Failed to login');
+        const errorData = (await response.json()) as { error?: string };
+        throw new Error(errorData.error || 'Incorrect password');
       }
       return await response.json();
     },
@@ -25,8 +26,8 @@ export const useLogin = () => {
       router.refresh();
       queryClient.invalidateQueries({ queryKey: ['current'] });
     },
-    onError: () => {
-      toast.error('Something Went Wrong');
+    onError: (error) => {
+      toast.error(error.message || 'Incorrect password');
     },
   });
   return mutation;

@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { differenceInDays, format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
 
 interface TaskDateProps {
   value: string;
@@ -20,18 +21,17 @@ export const TaskDate = ({ value, className }: TaskDateProps) => {
 
   const diffInDays = differenceInDays(endDate, today);
 
-  let textColor = 'text-muted-foreground';
-  if (diffInDays <= 3) {
-    textColor = 'text-red-500';
-  } else if (diffInDays <= 7) {
-    textColor = 'text-orange-500';
-  } else if (diffInDays <= 14) {
-    textColor = 'text-yellow-500';
+  let textColor = 'text-slate-600 dark:text-muted-foreground';
+  if (diffInDays < 0) {
+    textColor = 'text-rose-600 dark:text-rose-400 font-medium';
+  } else if (diffInDays <= 3) {
+    textColor = 'text-amber-600 dark:text-amber-400 font-medium';
   }
 
   return (
-    <div className={textColor}>
-      <span className={cn('truncate', className)}>{format(endDate, 'PPP')}</span>
+    <div className={cn('flex items-center gap-x-1.5 text-xs', textColor)}>
+      <CalendarIcon className="size-3.5 shrink-0 opacity-70" />
+      <span className={cn('truncate', className)}>{format(endDate, 'PP')}</span>
     </div>
   );
 };

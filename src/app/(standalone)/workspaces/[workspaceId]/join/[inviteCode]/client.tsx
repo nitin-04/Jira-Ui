@@ -18,7 +18,7 @@ export const WorkspaceIdJoinClient = () => {
     return <PageError message="Workspace not found" />;
   }
   return (
-    <div className="w-full lg:max-w-xl">
+    <div className="w-full max-w-xl px-2 sm:px-0">
       <JoinWorkspaceForm initialValues={initialValues} />
     </div>
   );

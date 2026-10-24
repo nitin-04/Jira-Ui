@@ -18,17 +18,23 @@ export const columns: ColumnDef<Task>[] = [
       return (
         <Button
           variant="ghost"
+          size="sm"
+          className="-ml-3 h-8 text-xs font-semibold text-slate-700 dark:text-neutral-300 hover:text-slate-900"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Task Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-1.5 size-3.5" />
         </Button>
       );
     },
     cell: ({ row }) => {
       const name = row.original.name;
 
-      return <p className="line-clamp-1">{name}</p>;
+      return (
+        <span className="font-semibold text-xs text-slate-900 dark:text-neutral-100 line-clamp-1">
+          {name}
+        </span>
+      );
     },
   },
   {
@@ -37,10 +43,12 @@ export const columns: ColumnDef<Task>[] = [
       return (
         <Button
           variant="ghost"
+          size="sm"
+          className="-ml-3 h-8 text-xs font-semibold text-slate-700 dark:text-neutral-300 hover:text-slate-900"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Project
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-1.5 size-3.5" />
         </Button>
       );
     },
@@ -48,13 +56,13 @@ export const columns: ColumnDef<Task>[] = [
       const project = row.original.project;
 
       return (
-        <div className="flex items-center gap-x-2 text-sm font-medium">
+        <div className="flex items-center gap-x-2 text-xs font-medium">
           <ProjectAvatar
-            className="size-6"
+            className="size-5 rounded"
             name={project?.name}
             image={project?.imageUrl}
           />
-          <p className="line-clamp-1">{project?.name}</p>
+          <p className="line-clamp-1 text-slate-700 dark:text-neutral-300">{project?.name}</p>
         </div>
       );
     },
@@ -65,10 +73,12 @@ export const columns: ColumnDef<Task>[] = [
       return (
         <Button
           variant="ghost"
+          size="sm"
+          className="-ml-3 h-8 text-xs font-semibold text-slate-700 dark:text-neutral-300 hover:text-slate-900"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Assignee
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-1.5 size-3.5" />
         </Button>
       );
     },
@@ -76,13 +86,13 @@ export const columns: ColumnDef<Task>[] = [
       const assignee = row.original.assignee;
 
       return (
-        <div className="flex items-center gap-x-2 text-sm font-medium">
+        <div className="flex items-center gap-x-2 text-xs font-medium">
           <MemberAvatar
-            className="size-6"
-            fallbackClassName="text-xs"
+            className="size-5"
+            fallbackClassName="text-[10px]"
             name={assignee?.name}
           />
-          <p className="line-clamp-1">{assignee?.name}</p>
+          <p className="line-clamp-1 text-slate-700 dark:text-neutral-300">{assignee?.name}</p>
         </div>
       );
     },
@@ -93,17 +103,19 @@ export const columns: ColumnDef<Task>[] = [
       return (
         <Button
           variant="ghost"
+          size="sm"
+          className="-ml-3 h-8 text-xs font-semibold text-slate-700 dark:text-neutral-300 hover:text-slate-900"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          DueDate
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          Due Date
+          <ArrowUpDown className="ml-1.5 size-3.5" />
         </Button>
       );
     },
     cell: ({ row }) => {
       const dueDate = row.original.dueDate;
 
-      return <TaskDate value={dueDate} />;
+      return <TaskDate value={dueDate} className="text-xs font-medium" />;
     },
   },
   {
@@ -112,17 +124,23 @@ export const columns: ColumnDef<Task>[] = [
       return (
         <Button
           variant="ghost"
+          size="sm"
+          className="-ml-3 h-8 text-xs font-semibold text-slate-700 dark:text-neutral-300 hover:text-slate-900"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Status
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-1.5 size-3.5" />
         </Button>
       );
     },
     cell: ({ row }) => {
       const status = row.original.status;
 
-      return <Badge variant={status}>{snakeCasetoTitleCase(status)}</Badge>;
+      return (
+        <Badge variant={status} className="text-[11px] font-semibold py-0.5 px-2">
+          {snakeCasetoTitleCase(status)}
+        </Badge>
+      );
     },
   },
   {
@@ -131,11 +149,13 @@ export const columns: ColumnDef<Task>[] = [
       const id = row.original.$id;
       const projectId = row.original.projectId;
       return (
-        <Taskactions id={id} projectId={projectId}>
-          <Button className="size-8 p-0" variant="ghost">
-            <MoreVertical className="size-4" />
-          </Button>
-        </Taskactions>
+        <div className="flex justify-end">
+          <Taskactions id={id} projectId={projectId}>
+            <Button className="size-8 p-0" variant="ghost">
+              <MoreVertical className="size-4" />
+            </Button>
+          </Taskactions>
+        </div>
       );
     },
   },

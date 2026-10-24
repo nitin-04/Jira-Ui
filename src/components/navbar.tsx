@@ -8,11 +8,11 @@ import { usePathname } from 'next/navigation';
 const pathnameMap = {
   tasks: {
     title: 'My Tasks',
-    description: 'View all of your tasks here',
+    description: 'Track and manage your workspace deliverables',
   },
   projects: {
-    title: 'My Project',
-    description: 'View tasks of your project here',
+    title: 'Project Overview',
+    description: 'Monitor sprints, roadmaps, and progress',
   },
   settings: {
     title: 'Settings',
@@ -20,13 +20,13 @@ const pathnameMap = {
   },
   members: {
     title: 'Members',
-    description: 'Manage workspace members and roles',
+    description: 'Manage workspace team members and roles',
   },
 };
 
 const defaultMap = {
-  title: 'Home',
-  description: 'Monitor all your projects and tasks here',
+  title: 'Workspace Dashboard',
+  description: 'Monitor high-level project telemetry, sprints, and task progress',
 };
 
 export const Navbar = () => {
@@ -37,10 +37,10 @@ export const Navbar = () => {
   const { title, description } = pathnameMap[pathnameKey] || defaultMap;
 
   return (
-    <nav className="pt-4 px-6 flex items-center justify-between border-b pb-4 border-border/40">
+    <nav className="py-4 px-6 flex items-center justify-between border-b border-border/80 bg-white/70 dark:bg-neutral-900/60 backdrop-blur-md sticky top-0 z-20 transition-colors">
       <div className="flex-col hidden lg:flex">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <h1 className="text-xl font-bold tracking-tight text-foreground">{title}</h1>
+        <p className="text-xs text-muted-foreground">{description}</p>
       </div>
       <MobileSidebar />
       <div className="flex items-center gap-x-3">

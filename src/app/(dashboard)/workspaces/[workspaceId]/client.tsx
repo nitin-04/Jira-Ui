@@ -87,19 +87,19 @@ export const TaskList = ({ data, total }: TaskListProps) => {
   const { open: createTask } = useCreateTaskModal();
 
   return (
-    <div className="bg-card border border-border/80 rounded-xl p-5 shadow-xs flex flex-col h-full">
-      <div className="flex items-center justify-between pb-4 border-b border-border/60">
+    <div className="bg-white dark:bg-neutral-900 border border-slate-200/90 dark:border-neutral-800 rounded-xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col h-full">
+      <div className="flex items-center justify-between pb-4 border-b border-slate-200/80 dark:border-neutral-800">
         <div className="flex items-center gap-x-2.5">
-          <p className="text-base font-semibold text-foreground">Tasks</p>
-          <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+          <p className="text-base font-bold text-slate-900 dark:text-foreground">Tasks</p>
+          <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-slate-100 dark:bg-neutral-800 text-xs font-bold text-slate-700 dark:text-neutral-300 border border-slate-200/60 dark:border-neutral-700">
             {total}
           </span>
         </div>
         <Button
-          variant="secondary"
+          variant="primary"
           size="sm"
           onClick={() => createTask()}
-          className="gap-x-1.5 h-8 text-xs font-medium"
+          className="gap-x-1.5 h-8 text-xs font-semibold shadow-xs"
         >
           <PlusIcon className="size-3.5" />
           <span>New Task</span>
@@ -108,17 +108,17 @@ export const TaskList = ({ data, total }: TaskListProps) => {
 
       {data.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-center">
-          <div className="size-12 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-3">
-            <CheckCircle2Icon className="size-6 text-muted-foreground" />
+          <div className="size-12 rounded-full bg-blue-50 dark:bg-neutral-800 flex items-center justify-center mb-3">
+            <CheckCircle2Icon className="size-6 text-blue-600 dark:text-muted-foreground" />
           </div>
-          <p className="text-sm font-medium text-foreground">No tasks found</p>
+          <p className="text-sm font-semibold text-slate-800 dark:text-foreground">No tasks found</p>
           <p className="text-xs text-muted-foreground mt-1 max-w-xs">
-            Create tasks to track your workspace deliverables and deadlines.
+            Create tasks to track deliverables, milestones, and sprint progress.
           </p>
           <Button
             size="sm"
             onClick={() => createTask()}
-            className="mt-4 gap-x-1.5 h-8 text-xs"
+            className="mt-4 gap-x-1.5 h-8 text-xs font-semibold"
           >
             <PlusIcon className="size-3.5" />
             Create your first task
@@ -136,14 +136,14 @@ export const TaskList = ({ data, total }: TaskListProps) => {
                   href={`/workspaces/${workspaceId}/tasks/${task.$id}`}
                   className="block group"
                 >
-                  <div className="p-3.5 rounded-lg border border-border/70 bg-card hover:bg-neutral-50/70 dark:hover:bg-neutral-900/60 hover:border-neutral-300 dark:hover:border-neutral-700 transition flex items-center justify-between gap-x-4">
+                  <div className="p-3.5 rounded-lg border border-slate-200/90 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 hover:bg-blue-50/30 dark:hover:bg-neutral-800/40 hover:border-blue-300 dark:hover:border-neutral-700 shadow-[0_1px_2px_rgba(0,0,0,0.02)] hover:shadow-xs transition flex items-center justify-between gap-x-4">
                     <div className="flex flex-col gap-y-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground group-hover:text-primary transition truncate">
+                      <p className="text-sm font-semibold text-slate-900 dark:text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition truncate">
                         {task.name}
                       </p>
                       <div className="flex items-center gap-x-2 text-xs text-muted-foreground">
                         {task.project && (
-                          <div className="flex items-center gap-x-1.5">
+                          <div className="flex items-center gap-x-1.5 bg-slate-100/80 dark:bg-neutral-800 px-1.5 py-0.5 rounded text-[11px] font-medium text-slate-700 dark:text-neutral-300">
                             <ProjectAvatar
                               className="size-3.5"
                               fallbackClassName="text-[8px]"
@@ -156,11 +156,11 @@ export const TaskList = ({ data, total }: TaskListProps) => {
                           </div>
                         )}
                         {task.project && isValidDate && (
-                          <span className="size-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
+                          <span className="size-1 rounded-full bg-slate-300 dark:bg-neutral-700" />
                         )}
                         {isValidDate && (
-                          <div className="flex items-center gap-x-1">
-                            <CalendarIcon className="size-3" />
+                          <div className="flex items-center gap-x-1 text-slate-600 dark:text-neutral-400">
+                            <CalendarIcon className="size-3 text-slate-400" />
                             <span>
                               {formatDistanceToNow(dueDate, { addSuffix: true })}
                             </span>
@@ -170,7 +170,7 @@ export const TaskList = ({ data, total }: TaskListProps) => {
                     </div>
 
                     <div className="flex items-center gap-x-2.5 shrink-0">
-                      <Badge variant={task.status} className="text-[11px] font-medium py-0 px-2 h-5">
+                      <Badge variant={task.status} className="text-[11px] font-semibold py-0.5 px-2 h-5 shadow-none">
                         {snakeCasetoTitleCase(task.status)}
                       </Badge>
                       <MemberAvatar
@@ -188,7 +188,7 @@ export const TaskList = ({ data, total }: TaskListProps) => {
       )}
 
       {data.length > 0 && (
-        <Button variant="outline" className="w-full mt-auto h-9 text-xs" asChild>
+        <Button variant="outline" className="w-full mt-auto h-9 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-neutral-800" asChild>
           <Link href={`/workspaces/${workspaceId}/tasks`} className="flex items-center justify-center gap-x-1.5">
             <span>View All Tasks ({total})</span>
             <ArrowRightIcon className="size-3.5" />
@@ -209,19 +209,19 @@ export const ProjectList = ({ data, total }: ProjectListProps) => {
   const { open: createProject } = useCreateProjectModal();
 
   return (
-    <div className="bg-card border border-border/80 rounded-xl p-5 shadow-xs flex flex-col">
-      <div className="flex items-center justify-between pb-4 border-b border-border/60">
+    <div className="bg-white dark:bg-neutral-900 border border-slate-200/90 dark:border-neutral-800 rounded-xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col">
+      <div className="flex items-center justify-between pb-4 border-b border-slate-200/80 dark:border-neutral-800">
         <div className="flex items-center gap-x-2.5">
-          <p className="text-base font-semibold text-foreground">Projects</p>
-          <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+          <p className="text-base font-bold text-slate-900 dark:text-foreground">Projects</p>
+          <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-slate-100 dark:bg-neutral-800 text-xs font-bold text-slate-700 dark:text-neutral-300 border border-slate-200/60 dark:border-neutral-700">
             {total}
           </span>
         </div>
         <Button
-          variant="secondary"
+          variant="outline"
           size="sm"
           onClick={createProject}
-          className="gap-x-1.5 h-8 text-xs font-medium"
+          className="gap-x-1.5 h-8 text-xs font-semibold shadow-xs hover:bg-slate-50 dark:hover:bg-neutral-800"
         >
           <PlusIcon className="size-3.5" />
           <span>New Project</span>
@@ -230,17 +230,17 @@ export const ProjectList = ({ data, total }: ProjectListProps) => {
 
       {data.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-8 text-center">
-          <div className="size-10 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-2.5">
-            <FolderGit2Icon className="size-5 text-muted-foreground" />
+          <div className="size-10 rounded-full bg-blue-50 dark:bg-neutral-800 flex items-center justify-center mb-2.5">
+            <FolderGit2Icon className="size-5 text-blue-600 dark:text-muted-foreground" />
           </div>
-          <p className="text-sm font-medium text-foreground">No projects yet</p>
+          <p className="text-sm font-semibold text-slate-800 dark:text-foreground">No projects yet</p>
           <p className="text-xs text-muted-foreground mt-0.5 max-w-xs">
             Organize tasks into projects for your team.
           </p>
           <Button
             size="sm"
             onClick={createProject}
-            className="mt-3 gap-x-1.5 h-8 text-xs"
+            className="mt-3 gap-x-1.5 h-8 text-xs font-semibold"
           >
             <PlusIcon className="size-3.5" />
             Create Project
@@ -254,15 +254,15 @@ export const ProjectList = ({ data, total }: ProjectListProps) => {
                 href={`/workspaces/${workspaceId}/projects/${project.$id}`}
                 className="block group"
               >
-                <div className="p-3 rounded-lg border border-border/70 bg-card hover:bg-neutral-50/70 dark:hover:bg-neutral-900/60 hover:border-neutral-300 dark:hover:border-neutral-700 transition flex items-center gap-x-3">
+                <div className="p-3 rounded-lg border border-slate-200/90 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 hover:bg-blue-50/30 dark:hover:bg-neutral-800/40 hover:border-blue-300 dark:hover:border-neutral-700 shadow-[0_1px_2px_rgba(0,0,0,0.02)] hover:shadow-xs transition flex items-center gap-x-3">
                   <ProjectAvatar
                     className="size-8 rounded-lg"
-                    fallbackClassName="text-sm"
+                    fallbackClassName="text-sm font-bold"
                     name={project.name}
                     image={project.imageUrl}
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-foreground group-hover:text-primary transition truncate">
+                    <p className="text-sm font-semibold text-slate-800 dark:text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition truncate">
                       {project.name}
                     </p>
                   </div>
@@ -285,15 +285,15 @@ export const MembersList = ({ data, total }: MembersListProps) => {
   const workspaceId = useWorkspaceId();
 
   return (
-    <div className="bg-card border border-border/80 rounded-xl p-5 shadow-xs flex flex-col">
-      <div className="flex items-center justify-between pb-4 border-b border-border/60">
+    <div className="bg-white dark:bg-neutral-900 border border-slate-200/90 dark:border-neutral-800 rounded-xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col">
+      <div className="flex items-center justify-between pb-4 border-b border-slate-200/80 dark:border-neutral-800">
         <div className="flex items-center gap-x-2.5">
-          <p className="text-base font-semibold text-foreground">Team Members</p>
-          <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+          <p className="text-base font-bold text-slate-900 dark:text-foreground">Team Members</p>
+          <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-slate-100 dark:bg-neutral-800 text-xs font-bold text-slate-700 dark:text-neutral-300 border border-slate-200/60 dark:border-neutral-700">
             {total}
           </span>
         </div>
-        <Button asChild variant="ghost" size="sm" className="h-8 text-xs gap-x-1.5 text-muted-foreground hover:text-foreground">
+        <Button asChild variant="ghost" size="sm" className="h-8 text-xs font-semibold gap-x-1.5 text-slate-600 hover:text-slate-900 dark:text-muted-foreground dark:hover:text-foreground hover:bg-slate-100/80">
           <Link href={`/workspaces/${workspaceId}/members`}>
             <SettingsIcon className="size-3.5" />
             <span>Manage</span>
@@ -303,19 +303,19 @@ export const MembersList = ({ data, total }: MembersListProps) => {
 
       {data.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-8 text-center">
-          <div className="size-10 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-2.5">
-            <UsersIcon className="size-5 text-muted-foreground" />
+          <div className="size-10 rounded-full bg-blue-50 dark:bg-neutral-800 flex items-center justify-center mb-2.5">
+            <UsersIcon className="size-5 text-blue-600 dark:text-muted-foreground" />
           </div>
-          <p className="text-sm font-medium text-foreground">No members found</p>
+          <p className="text-sm font-semibold text-slate-800 dark:text-foreground">No members found</p>
         </div>
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
           {data.slice(0, 6).map((member) => (
             <li key={member.$id}>
-              <div className="p-3 rounded-lg border border-border/70 bg-card flex items-center gap-x-3">
+              <div className="p-3 rounded-lg border border-slate-200/90 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex items-center gap-x-3">
                 <MemberAvatar className="size-8" name={member.name} />
                 <div className="flex flex-col min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">
+                  <p className="text-sm font-semibold text-slate-800 dark:text-foreground truncate">
                     {member.name}
                   </p>
                   <p className="text-xs text-muted-foreground truncate">

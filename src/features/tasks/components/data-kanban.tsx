@@ -167,7 +167,7 @@ export const DataKanban = ({ data, onChange }: DataKanbanProps) => {
           return (
             <div
               key={board}
-              className="flex-1 min-w-[240px] bg-neutral-100/60 dark:bg-neutral-900/50 border border-border/60 rounded-xl p-2 flex flex-col"
+              className="flex-1 min-w-[260px] max-w-[320px] bg-slate-100/90 dark:bg-neutral-900/60 border border-slate-200/90 dark:border-neutral-800 rounded-xl p-2.5 flex flex-col shadow-xs"
             >
               <KanbanColumnHeader
                 board={board}

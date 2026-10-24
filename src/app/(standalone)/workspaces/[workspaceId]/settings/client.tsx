@@ -15,11 +15,11 @@ export const WorkspaceIdSettingsClient = () => {
   }
 
   if (!initialValues) {
-    return <PageError message="Project not found" />;
+    return <PageError message="Workspace not found" />;
   }
 
   return (
-    <div className="w-full lg:max-w-xl">
+    <div className="w-full max-w-2xl px-2 sm:px-0">
       <EditWorkspaceForm initialValues={initialValues} />
     </div>
   );

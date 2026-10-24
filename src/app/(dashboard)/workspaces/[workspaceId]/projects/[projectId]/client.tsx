@@ -31,22 +31,29 @@ export const ProjectIdClient = () => {
   }
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-x-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-white dark:bg-neutral-900 border border-slate-200/90 dark:border-neutral-800 rounded-xl shadow-xs">
+        <div className="flex items-center gap-x-3">
           <ProjectAvatar
             name={project.name}
             image={project.imageUrl}
-            className="siz-8"
+            className="size-10 rounded-lg text-sm font-semibold shadow-xs"
           />
-          <p className="text-lg font-semibold">{project.name}</p>
+          <div>
+            <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-neutral-100">
+              {project.name}
+            </h1>
+            <p className="text-xs text-slate-500 dark:text-neutral-400">
+              Project Overview & Tasks
+            </p>
+          </div>
         </div>
-        <div>
-          <Button variant="secondary" size="sm" asChild>
+        <div className="flex items-center gap-2">
+          <Button variant="secondary" size="sm" asChild className="h-8 text-xs font-semibold shadow-xs">
             <Link
               href={`/workspaces/${project.workspaceId}/projects/${project.$id}/settings`}
             >
-              <PencilIcon className="size-4 mr-2" />
-              Edit Project
+              <PencilIcon className="size-3.5 mr-1.5" />
+              Settings
             </Link>
           </Button>
         </div>

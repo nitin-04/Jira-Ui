@@ -88,9 +88,9 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
         defaultValue={status ?? undefined}
         onValueChange={(value) => onStatusChange(value)}
       >
-        <SelectTrigger className="w-full lg:w-auto h-8">
+        <SelectTrigger className="w-full lg:w-auto h-8 bg-slate-50/80 dark:bg-neutral-800/80 border-slate-200/80 dark:border-neutral-700/80 text-xs font-medium">
           <div className="flex items-center pr-2">
-            <ListChecksIcon className="size-4 mr-2" />
+            <ListChecksIcon className="size-3.5 mr-2 text-slate-500" />
             <SelectValue placeholder="All Statuses" />
           </div>
         </SelectTrigger>
@@ -109,9 +109,9 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
         defaultValue={assigneeId ?? undefined}
         onValueChange={(value) => onAssigneeChange(value)}
       >
-        <SelectTrigger className="w-full lg:w-auto h-8">
+        <SelectTrigger className="w-full lg:w-auto h-8 bg-slate-50/80 dark:bg-neutral-800/80 border-slate-200/80 dark:border-neutral-700/80 text-xs font-medium">
           <div className="flex items-center pr-2">
-            <UserIcon className="size-4 mr-2" />
+            <UserIcon className="size-3.5 mr-2 text-slate-500" />
             <SelectValue placeholder="All Assignees" />
           </div>
         </SelectTrigger>
@@ -131,9 +131,9 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
           defaultValue={projectId ?? undefined}
           onValueChange={(value) => onProjectChange(value)}
         >
-          <SelectTrigger className="w-full lg:w-auto h-8">
+          <SelectTrigger className="w-full lg:w-auto h-8 bg-slate-50/80 dark:bg-neutral-800/80 border-slate-200/80 dark:border-neutral-700/80 text-xs font-medium">
             <div className="flex items-center pr-2">
-              <FolderIcon className="size-4 mr-2" />
+              <FolderIcon className="size-3.5 mr-2 text-slate-500" />
               <SelectValue placeholder="All Projects" />
             </div>
           </SelectTrigger>
@@ -151,7 +151,7 @@ export const DataFilters = ({ hideProjectFilter }: DataFiltersProps) => {
 
       <DatePicker
         placeholder="Due Date"
-        className="h-8 w-full lg:w-auto"
+        className="h-8 w-full lg:w-auto bg-slate-50/80 dark:bg-neutral-800/80 border-slate-200/80 dark:border-neutral-700/80 text-xs font-medium"
         value={dueDate ? new Date(dueDate) : undefined}
         onChange={(date) => {
           setFilters({ dueDate: date ? date.toISOString() : null });

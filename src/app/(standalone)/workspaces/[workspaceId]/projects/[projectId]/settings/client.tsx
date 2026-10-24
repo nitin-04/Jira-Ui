@@ -19,7 +19,7 @@ export const ProjectIdSettingsClient = () => {
   }
 
   return (
-    <div className="w-full lg:max-w-xl">
+    <div className="w-full max-w-2xl px-2 sm:px-0">
       <EditProjectForm initialValues={initialValues} />
     </div>
   );

@@ -18,16 +18,16 @@ const badgeVariants = cva(
           'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         outline:
           'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
-        [TaskStatus.TODO]:
-          'border-transparent bg-red-400 text-primary hover:bg-red-400/90',
-        [TaskStatus.IN_PROGRESS]:
-          'border-transparent bg-yellow-400 text-primary hover:bg-yellow-400/90',
-        [TaskStatus.IN_REVIEW]:
-          'border-transparent bg-blue-400 text-primary hover:bg-blue-400/90',
-        [TaskStatus.DONE]:
-          'border-transparent bg-emerald-400 text-primary hover:bg-emerald-400/90',
         [TaskStatus.BACKLOG]:
-          'border-transparent bg-pink-400 text-primary hover:bg-pink-400/90',
+          'bg-slate-100 text-slate-700 border-slate-200/90 dark:bg-slate-900/60 dark:text-slate-300 dark:border-slate-800',
+        [TaskStatus.TODO]:
+          'bg-rose-50 text-rose-700 border-rose-200/80 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-900',
+        [TaskStatus.IN_PROGRESS]:
+          'bg-amber-50 text-amber-700 border-amber-200/80 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-900',
+        [TaskStatus.IN_REVIEW]:
+          'bg-blue-50 text-blue-700 border-blue-200/80 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-900',
+        [TaskStatus.DONE]:
+          'bg-emerald-50 text-emerald-700 border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-900',
       },
     },
     defaultVariants: {

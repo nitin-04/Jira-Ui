@@ -19,20 +19,35 @@ interface KanbanColumnHeaderProps {
   taskCount: number;
 }
 
-const statusIconMap: Record<TaskStatus, React.ReactNode> = {
-  [TaskStatus.BACKLOG]: (
-    <CircleDashedIcon className="size-4 text-pink-500" />
-  ),
-  [TaskStatus.TODO]: <CircleIcon className="size-4 text-rose-500" />,
-  [TaskStatus.IN_PROGRESS]: (
-    <CircleDotDashedIcon className="size-4 text-amber-500" />
-  ),
-  [TaskStatus.IN_REVIEW]: (
-    <CircleDotIcon className="size-4 text-blue-500" />
-  ),
-  [TaskStatus.DONE]: (
-    <CircleCheckIcon className="size-4 text-emerald-500" />
-  ),
+const statusConfig: Record<
+  TaskStatus,
+  { icon: React.ReactNode; color: string; dotBg: string }
+> = {
+  [TaskStatus.BACKLOG]: {
+    icon: <CircleDashedIcon className="size-4 text-slate-500" />,
+    color: 'border-slate-300 dark:border-slate-700',
+    dotBg: 'bg-slate-400',
+  },
+  [TaskStatus.TODO]: {
+    icon: <CircleIcon className="size-4 text-rose-500" />,
+    color: 'border-rose-300 dark:border-rose-800',
+    dotBg: 'bg-rose-500',
+  },
+  [TaskStatus.IN_PROGRESS]: {
+    icon: <CircleDotDashedIcon className="size-4 text-amber-500" />,
+    color: 'border-amber-300 dark:border-amber-800',
+    dotBg: 'bg-amber-500',
+  },
+  [TaskStatus.IN_REVIEW]: {
+    icon: <CircleDotIcon className="size-4 text-blue-500" />,
+    color: 'border-blue-300 dark:border-blue-800',
+    dotBg: 'bg-blue-500',
+  },
+  [TaskStatus.DONE]: {
+    icon: <CircleCheckIcon className="size-4 text-emerald-500" />,
+    color: 'border-emerald-300 dark:border-emerald-800',
+    dotBg: 'bg-emerald-500',
+  },
 };
 
 export const KanbanColumnHeader = ({
@@ -40,22 +55,22 @@ export const KanbanColumnHeader = ({
   taskCount,
 }: KanbanColumnHeaderProps) => {
   const { open } = useCreateTaskModal();
-  const icon = statusIconMap[board];
+  const { icon } = statusConfig[board];
 
   return (
-    <div className="px-2 py-2 mb-1 flex items-center justify-between">
+    <div className="px-2 py-2 mb-2 flex items-center justify-between">
       <div className="flex items-center gap-x-2">
         {icon}
-        <h2 className="text-sm font-semibold text-foreground tracking-tight">
+        <h2 className="text-sm font-bold text-slate-800 dark:text-neutral-100 tracking-tight">
           {snakeCasetoTitleCase(board)}
         </h2>
-        <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-[11px] text-neutral-600 dark:text-neutral-300 font-semibold">
+        <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-slate-200/80 dark:bg-neutral-800 text-[11px] text-slate-700 dark:text-neutral-300 font-bold">
           {taskCount}
         </span>
       </div>
 
       <Button
-        className="size-6 rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-500 hover:text-foreground transition"
+        className="size-6 rounded-md hover:bg-slate-200/80 dark:hover:bg-neutral-800 text-slate-500 hover:text-slate-900 dark:hover:text-foreground transition cursor-pointer"
         onClick={() => open(board)}
         variant="ghost"
         size="icon"

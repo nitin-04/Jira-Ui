@@ -8,9 +8,10 @@ interface DottedSeparatorProps {
   gapSize?: string;
   direction?: 'horizontal' | 'vertical';
 }
+
 export const DottedSeparator = ({
   className,
-  color = '#320b9e',
+  color = '#cbd5e1',
   height = '2px',
   dotSize = '2px',
   gapSize = '6px',

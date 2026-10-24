@@ -26,7 +26,7 @@ export const Projects = () => {
         <button
           type="button"
           onClick={open}
-          className="text-muted-foreground hover:text-foreground transition cursor-pointer"
+          className="text-muted-foreground hover:text-blue-600 dark:hover:text-foreground transition cursor-pointer"
           title="Create Project"
         >
           <RiAddCircleFill className="size-5" />
@@ -42,9 +42,10 @@ export const Projects = () => {
             <Link href={href} key={project.$id}>
               <div
                 className={cn(
-                  'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-200/40 dark:hover:bg-neutral-800/40',
-                  isActive &&
-                    'bg-neutral-200/80 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-xs font-semibold'
+                  'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150',
+                  isActive
+                    ? 'bg-blue-50/90 text-blue-700 dark:bg-neutral-800 dark:text-neutral-100 border border-blue-200/60 dark:border-neutral-700/60 font-semibold shadow-xs'
+                    : 'text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-neutral-100 hover:bg-slate-100/80 dark:hover:bg-neutral-800/50'
                 )}
               >
                 <ProjectAvatar name={project.name} image={project.imageUrl} className="size-5 shrink-0" />
